@@ -175,7 +175,7 @@ def get_order(appid,mch_id,body,detail,out_trade_no,total_fee,spbill_create_ip,n
             if self.resp['ret']==1:
                 dmoney = float(self.meal['meal_price'])-float(self.meal['meal_nowprice'])
                 _orderctl.add_payorder(self.userid,self.orderno,self.productid,0,self.meal['meal_price'],dmoney,self.meal['meal_nowprice'],self.platform,self.meal['meal_name'])
-        except Exception ,ex:
+        except Exception as ex:
             logger.error('error in getwxorder:%s' % str(ex))
             self.resp['code'],self.resp['msg'] = 3,str(ex)
         self.send()
