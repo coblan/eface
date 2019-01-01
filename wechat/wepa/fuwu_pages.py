@@ -77,7 +77,7 @@ class FuWuHao(object):
         url='https://api.weixin.qq.com/sns/userinfo?access_token=%(access_token)s&openid=%(openid)s&lang=zh_CN'\
             %{'access_token':token,'openid':openid}
         resp=requests.get(url)
-        dc= json.loads(resp.content)
+        dc= json.loads(resp.text)
         if dc.get('errcode'):
             raise UserWarning('获取用户信息错误:%s'%resp.text)
         return dc
