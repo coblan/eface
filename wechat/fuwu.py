@@ -10,6 +10,7 @@ from .models import WxInfo
 import urllib
 import random
 
+
 class FuWuHao(object):
     """
     先重定向，获取到code
@@ -22,6 +23,9 @@ class FuWuHao(object):
     scheme='http'
     next_url='/_wechat/print_username'
     def get_redirect_url(self,request):
+        """
+        生成的url，直接放到公众号的菜单里面，可以跳转到 recieve_url,携带参数code
+        """
         red_url=self.get_recieve_url(request)
         red_url=urllib.quote(red_url)
         url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=%(scope)s&state=123#wechat_redirect"\
