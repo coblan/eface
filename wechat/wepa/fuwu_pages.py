@@ -55,7 +55,7 @@ class FuWuHao(object):
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
         resp=requests.get(url)
-        dc = json.loads(resp.content)
+        dc = json.loads(resp.text)
         return dc
     
     def get_userinfo(self,token,openid):
