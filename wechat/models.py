@@ -40,7 +40,7 @@ class WXOrderBase(models.Model):
     #update_time=models.CharField('update time',max_length=50,blank=True)
 
 class WxInfo(models.Model):
-    user=models.ForeignKey(User,verbose_name='user',blank=True,null=True)
+    user=models.OneToOneField(User,verbose_name='user',blank=True,null=True)
     openid=models.CharField('openid',max_length=30,unique=True)
     head=models.CharField('head',max_length=300,blank=True)
     nickname=models.CharField('nick name',max_length=200,blank=True)

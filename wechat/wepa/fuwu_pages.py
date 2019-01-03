@@ -14,12 +14,27 @@ from ..base_data import wechat_page_dc
 from helpers.func.random_str import short_uuid
 
 class FuWuHao(object):
-    APPID= settings.APPID  #'wx7080c32bd10defb0'
-    APPSECRET=settings.APPSECRET #'d4624c36b6795d1d99dcf0547af5443d'
+    """
+    触发
+    https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7018edf138c754f4&redirect_uri=http://port.enjoyst.com/wx/login&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect
+    """
+    APPID= settings.WX_APPID  #'wx7080c32bd10defb0'
+    APPSECRET=settings.WX_APPSECRET #'d4624c36b6795d1d99dcf0547af5443d'
     need_login=False
     def __init__(self, request,engin):
         self.request=request
         
+    @classmethod
+    def get_init_code_url(cls):
+        """
+        """
+        url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
+        kws={
+            'appid':cls.APPID,
+            'redirect_url':settings.WX_REDIRECT_URL,
+        }
+        return url%kws
+    
     def get_context(self):
         token_dc = self.get_access_token()
         token = token_dc.get('access_token')
