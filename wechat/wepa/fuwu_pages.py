@@ -25,7 +25,7 @@ class FuWuHao(object):
         self.request=request
         
     @classmethod
-    def get_init_code_url(cls):
+    def regist_or_login_url(cls):
         """
         """
         url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
