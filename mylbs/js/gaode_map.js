@@ -26,6 +26,7 @@ var gaode_map={
     },
     methods:{
         geolocation:function(callback){
+            var mapObj = this.map
             this.map.plugin('AMap.Geolocation', function() {
                 var geolocation = new AMap.Geolocation({
                     // 是否使用高精度定位，默认：true
@@ -41,7 +42,7 @@ var gaode_map={
                     showButton: true,
                     showCircle:true,
                 })
-
+                mapObj.addControl(geolocation);
                 geolocation.getCurrentPosition()
                 AMap.event.addListener(geolocation, 'complete', onComplete)
                 AMap.event.addListener(geolocation, 'error', onError)
