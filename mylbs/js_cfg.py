@@ -10,7 +10,8 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     dc = {
-        'gaode':'https://webapi.amap.com/maps?v=1.4.12&key=您申请的key值',
+        'gaode':'https://webapi.amap.com/maps?v=1.4.12&key=0909294a753dfe00a0aa124b6ecb93eb',
+        #'gaode':'https://webapi.amap.com/maps?v=1.4.12&key=您申请的key值',
         'gaode_css': '',
         'mylbs':'/static/js/mylbs.pack.js?t=%s'%js_stamp_dc.get('mylbs_pack_js'),
     }
