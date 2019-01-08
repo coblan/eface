@@ -111,7 +111,7 @@ var gaode_map = {
                     // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
                     buttonOffset: new AMap.Pixel(10, 20),
                     //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-                    zoomToAccuracy: true,
+                    //zoomToAccuracy: true,
                     //  定位按钮的排放位置,  RB表示右下
                     buttonPosition: 'RT',
                     showButton: true,
