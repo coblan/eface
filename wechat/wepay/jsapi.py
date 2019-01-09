@@ -171,9 +171,6 @@ class JSApiWePay(object):
         xml_str+='</xml>'
         return xml_str
     
-    #def process_order_resp(self,resp):
-        #return resp
-    
     def makesure_order(self,data):
         """
         微信服务器确认订单支付后，会调用到这个函数
