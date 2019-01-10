@@ -148,7 +148,6 @@ class WePayJsapi(object):
             }
             order_args['paySign']=self.params_sign(order_args)
             ret={
-                'msg':resp.get('return_msg'),
                 'order_args': order_args
             }    
         return ret
