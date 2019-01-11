@@ -10,6 +10,7 @@ from ..base_data import wechat_page_dc
 from ..models import TWXOrder
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse
+import os
 
 # proxy = {'https': '127.0.0.1:8087'} 
 
@@ -121,10 +122,15 @@ class WePayJsapi(object):
                 postdata+='<{key}>{value}</{key}>\n'.format(key=k,value=v)
         postdata+='</xml>'
         
-        resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'))
+        if not os.environ.get('TEST'):
+            resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'))
         
-        #ToDo 判断是否是正确的XML，如果是，才继续解析
-        resp =xmltodict.parse(resp.content).get('xml')
+            #ToDo 判断是否是正确的XML，如果是，才继续解析
+            resp =xmltodict.parse(resp.content).get('xml')
+        else:
+            # 调试代码
+            resp={'return_code': 'SUCCESS', 'return_msg': 'OK', 'appid': 'wx7018edf138c754f4', 'mch_id': '1319446301', 'device_info': 'WEB', 'nonce_str': 'fJTGzW3scD3gmAIz', 'sign': 'ACE8FA498620F89E2BDF2FB88E30B003', 'result_code': 'SUCCESS', 'prepay_id': 'wx11155426455949fa57f530911795946978', 'trade_type': 'JSAPI'}
+
         return resp
     
     def fetch_order_args(self, resp):
@@ -136,8 +142,6 @@ class WePayJsapi(object):
                 'msg':resp.get('return_msg'),
                 'order_args':{}
                  }            
-            
-            
         else:
             order_args={
                 'appId' : self.APPID,
@@ -152,42 +156,7 @@ class WePayJsapi(object):
             }    
         return ret
     
-    #def order_confirmed(self,wxorder):
-        #"""
-        #根据 wxorder的信息，填写其他相关的数据表，然后保存这些信息。
-        #"""
-        #pass
-    
-    #def reply(self,request):
-        #""""""
-        #self.request=request
-        
-        #notify_data = xmltodict.parse( request.body).get('xml')
-        #sign=notify_data.pop('sign')
-        #local_sign=self.params_sign(notify_data)
-        #ret={
-            #'return_code':'FAIL',
-            #'return_msg':'参数错误或缺少参数！'
-        #}
-        #if local_sign!=sign:
-            #ret={
-                #'return_code':'FAIL',
-                #'return_msg':'签名失败'
-            #}            
-        #elif notify_data.get('return_code')=='SUCCESS':
-            #self.makesure_order(notify_data)
-            #ret={
-                #'return_code':'SUCCESS',
-                #'return_msg':'OK'
-            #}
-        #xml_str='<xml>'
-        #for k,v in ret.items():
-            #xml_str+='<{key}><![CDATA[{value}]]></{key}>'.format(key=k,value=v)
-        #xml_str+='</xml>'
-        #return xml_str
-    
 
-    
     def get_nonce_str(self,length=15):
         a='abcdefghijklmnopqrstuvwxyz'
         a+=a.upper()
@@ -222,11 +191,12 @@ class WePayReplay(object):
     def get_context(self):
         notify_data = xmltodict.parse( self.request.body).get('xml')
         sign=notify_data.pop('sign')
-        local_sign=self.params_sign(notify_data)
-        ret={
-            'return_code':'FAIL',
-            'return_msg':'参数错误或缺少参数！'
-        }
+        if os.environ.get('TEST'):
+            # test 时，不去验证参数，因为参数可能被中途test代码变动了。
+            local_sign = sign
+        else:
+            local_sign=self.params_sign(notify_data)
+      
         if local_sign!=sign:
             ret={
                 'return_code':'FAIL',
@@ -238,6 +208,11 @@ class WePayReplay(object):
                 'return_code':'SUCCESS',
                 'return_msg':'OK'
             }
+        else:
+            ret={
+            'return_code':'FAIL',
+            'return_msg':'参数错误或缺少参数！'
+              }
         xml_str='<xml>'
         for k,v in ret.items():
             xml_str+='<{key}><![CDATA[{value}]]></{key}>'.format(key=k,value=v)
