@@ -5,7 +5,9 @@ from helpers.director.decorators.cache_redis import cache_redis
 import time
 from helpers.func.random_str import get_str
 import hashlib
+from helpers.director.shortcut import director_view
 
+@director_view('wx_jssdk_config_parameter')
 def get_config_parameter(url):
     access_token = _get_access_token()
     ticket = _get_ticket(access_token)
