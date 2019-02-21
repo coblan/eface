@@ -12,8 +12,10 @@ import random
 from django.conf import settings
 from ..base_data import wechat_page_dc
 from helpers.func.random_str import short_uuid
+import urllib
+from helpers.director.decorator import get_request_cache
 
-class FuWuHao(object):
+class FuWuHaoLogin(object):
     """
     在使用时，如果判断用户没有登录，则
     url = FuWuHao.regist_or_login_url()
@@ -31,13 +33,17 @@ class FuWuHao(object):
         self.request=request
         
     @classmethod
-    def regist_or_login_url(cls):
+    def regist_or_login_url(cls,next_url=None):
         """
         """
         url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
+        if next_url:
+            redirect_url = settings.WX_REDIRECT_URL + '?next=' +next_url
+        else:
+            redirect_url = settings.WX_REDIRECT_URL
         kws={
             'appid':cls.APPID,
-            'redirect_url':settings.WX_REDIRECT_URL,
+            'redirect_url':redirect_url,
         }
         return url%kws
     
@@ -56,7 +62,15 @@ class FuWuHao(object):
         """
         这里用于重载，当微信公众号登录后，跳转的页面
         """
-        pass
+        request = get_request_cache()['request']
+        path = request.get_full_path()
+        query = urllib.parse.urlparse(path).query
+        if query:
+            dc = urllib.parse.parse_qs(query)
+            if dc.get('next'):
+                return redirect(dc.get('next')[0])
+        return redirect(settings.WX_REDIRECT_URL)
+
     
     
     def get_access_token(self):
@@ -136,7 +150,7 @@ class FuWuHao(object):
     
 
 wechat_page_dc.update({
-    'login':FuWuHao
+    'login':FuWuHaoLogin
 })
 
 class FuWuHao_old(object):
