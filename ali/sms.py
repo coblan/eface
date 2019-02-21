@@ -8,8 +8,8 @@ from helpers.director.network.myredis import redis_conn
 import re
 
 code_template_id = settings.ALI_SMS.get('code_template_id') 
-
-
+import logging
+general_log = logging.getLogger('general_log')
 
 @director_view('ali.phonecode')
 def get_phonecode(mobile,**kws):
@@ -26,7 +26,7 @@ def get_phonecode(mobile,**kws):
     rt = send_sms(__business_id, mobile, '企鹅洗车', code_template_id,params)
     
     print(rt)
-    
+    general_log.info('阿里获取手机验证码返回:'+rt.decode('utf-8'))
     return  {
             'success':True,
         }

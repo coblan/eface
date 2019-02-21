@@ -28,8 +28,12 @@ var wechat={
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                             callback()
                         }else{
-                            cfg.showError(res.err_code + "--" + res.err_desc + "--" + res.err_msg)
-                            //cfg.showError(res.err_msg)
+                            if(res.err_msg =='get_brand_wcpay_request:cancel'){
+                                cfg.showError('用户取消支付！')
+                            }else{
+                                //cfg.showError(res.err_code + "--" + res.err_desc + "--" + res.err_msg);
+                                cfg.showError(res.err_msg);
+                            }
                         }
                     });
             }
@@ -45,7 +49,8 @@ var wechat={
             }
 
         })
-    }
+    },
+
 }
 
 window.wechat=wechat

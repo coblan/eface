@@ -8,6 +8,9 @@ import random
 import time
 
 # proxy = {'https': '127.0.0.1:8087'} 
+"""
+这个模块应该是没有用了。
+"""
 
 class JSApiWePay(object):
     """

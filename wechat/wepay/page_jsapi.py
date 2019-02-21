@@ -59,13 +59,15 @@ class WePayJsapi(object):
         wxorder.total_fee = 100 # 单位分
   
         """
-        wxorder = TWXOrder.objects.create(trade_type='JSAPI',openid=self.openid)
-        wxorder.trade_type = 'JSAPI' 
-        wxorder.save()
+        wxorder = TWXOrder.objects.create(trade_type=self.trade_type,openid=self.openid)
+        #wxorder.trade_type = 
+        #wxorder.save()
         return wxorder
     
     def make_order(self,request):
         """
+        构建微信公众号订单，生成公众号里面使用的支付参数。
+        
         rt_dc = {'msg': 'OK', 'order_args': {'appId': 'wx7018edf138c754f4', 'package': 'prepay_id=wx09170611946682a346b0be861090939790', 'nonceStr': 'ZZKolfzBSQmTBeo', 'timeStamp': '1547024783', 'signType': 'MD5', 'paySign': 'DC76B4049A521B532C5A6B1630546AEC'}}
         """
         self.reply_full_url=r'%(host)s/%(path)s'%({'host':settings.SELF_DOMAIN,'path':self.replay_url})

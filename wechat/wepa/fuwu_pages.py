@@ -15,9 +15,15 @@ from helpers.func.random_str import short_uuid
 
 class FuWuHao(object):
     """
-    触发
+    在使用时，如果判断用户没有登录，则
+    url = FuWuHao.regist_or_login_url()
+    redirect(url)
+    这样会利用openid登录用户，然后跳转到settings.WX_REDIRECT_URL这个地址
+    
+    微信的起始触发地址为：
     https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7018edf138c754f4&redirect_uri=http://port.enjoyst.com/wx/login&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect
     """
+    
     APPID= settings.WX_APPID  #'wx7080c32bd10defb0'
     APPSECRET=settings.WX_APPSECRET #'d4624c36b6795d1d99dcf0547af5443d'
     need_login=False
@@ -42,7 +48,6 @@ class FuWuHao(object):
         
         userinfo= self.get_userinfo(token, openid)
         user = self.update_or_create_user(userinfo)
-        #user = self.get_or_create_user(userinfo)
         self.login(user)
         return self.after_login(user)
         
