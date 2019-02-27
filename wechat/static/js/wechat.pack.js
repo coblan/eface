@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -135,7 +135,7 @@ window.wechat = wechat;
 "use strict";
 
 
-__webpack_require__(6);
+__webpack_require__(7);
 
 Vue.component('com-wechat-confirm-win', {
     props: ['ctx'],
@@ -153,6 +153,8 @@ Vue.component('com-wechat-confirm-win', {
 
 "use strict";
 
+
+var _init_jsapi = __webpack_require__(3);
 
 var wxtool = {
     is_weixin: function is_weixin() {
@@ -172,7 +174,8 @@ var wxtool = {
             }
             winclose();
         });
-    }
+    },
+    jsapi_ready: _init_jsapi.wx_jsapi_ready
 };
 
 window.wxtool = wxtool;
@@ -181,7 +184,46 @@ window.wxtool = wxtool;
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)();
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.wx_jsapi_ready = wx_jsapi_ready;
+function wx_jsapi_ready(api_list) {
+    return new Promise(function (resolve, reject) {
+        new Promise(function (resolve1, reject1) {
+            var post_data = {
+                url: location.href
+            };
+            ex.director_call('wx_jssdk_config_parameter', post_data, function (resp) {
+                ex.load_js('https://res.wx.qq.com/open/js/jweixin-1.4.0.js', function () {
+                    resolve1(resp);
+                });
+            });
+        }).then(function (jssdk_config) {
+
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: jssdk_config.appId, // 必填，公众号的唯一标识
+                timestamp: jssdk_config.timestamp, // 必填，生成签名的时间戳
+                nonceStr: jssdk_config.noncestr, // 必填，生成签名的随机串
+                signature: jssdk_config.signature, // 必填，签名
+                jsApiList: api_list // 必填，需要使用的JS接口列表
+            });
+            wx.ready(function () {
+                resolve();
+            });
+        });
+    });
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)();
 // imports
 
 
@@ -192,7 +234,7 @@ exports.push([module.i, ".com-wechat-confirm-win {\n  background-color: white;\n
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -248,7 +290,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -500,16 +542,16 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -526,7 +568,7 @@ if(false) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

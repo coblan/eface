@@ -15,6 +15,9 @@ from helpers.func.random_str import short_uuid
 import urllib
 from helpers.director.decorator import get_request_cache
 
+from django.shortcuts import render
+from .funs import get_access_token
+
 class FuWuHaoLogin(object):
     """
     在使用时，如果判断用户没有登录，则
@@ -48,15 +51,18 @@ class FuWuHaoLogin(object):
         return url%kws
     
     def get_context(self):
-        token_dc = self.get_access_token()
+        token_dc = self.get_auth_data_dict()
         token = token_dc.get('access_token')
         openid = token_dc.get('openid')
-        
         userinfo= self.get_userinfo(token, openid)
         user = self.update_or_create_user(userinfo)
         self.login(user)
         return self.after_login(user)
-        
+        #if is_subscribe(openid):
+            #return self.after_login(user)
+        #else:
+            ##return redirect('https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2NTEzMjgzNA==#wechat_redirect')
+            #return redirect('/wx/subscribe')
         
     def after_login(self,user):
         """
@@ -73,7 +79,7 @@ class FuWuHaoLogin(object):
 
     
     
-    def get_access_token(self):
+    def get_auth_data_dict(self):
         """
         通过code ，去wechat获取access_token
         
@@ -91,7 +97,7 @@ class FuWuHaoLogin(object):
         resp=requests.get(url)
         dc = json.loads(resp.text)
         return dc
-    
+     
     def get_userinfo(self,token,openid):
         """
         通过access_token获取用户的具体信息
@@ -141,16 +147,39 @@ class FuWuHaoLogin(object):
         """
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         auth.login(self.request,user)
-        
-    
 
+class SubscribeProb(object):
+    def __init__(self,request,engin):
+        self.request = request
     
+    def get_context(self):
+        return render(self.request,'wxfront/subscribe.html')
+
+        
+def is_subscribe(openid):
+    accesstoken = get_access_token()
+    args = {
+        'accesstoken':accesstoken,
+        'openid':openid,
+    }
+    url ="https://api.weixin.qq.com/cgi-bin/user/info?access_token=%(accesstoken)s&openid=%(openid)s&lang=zh_CN"
+    url =url%args
+    rt = requests.get(url)
+    dc = json.loads(rt.text)
+    return dc['subscribe'] ==1
     
-    
-    
+#@cache_redis(ex=7000)
+#def get_access_token():
+    #args = {'appid':settings.WX_APPID,'secret':settings.WX_APPSECRET}
+    #url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%(appid)s&secret=%(secret)s"
+    #url = url % args
+    #rt = requests.get(url)
+    #dc = json.loads(rt.text)
+    #return dc['access_token']
 
 wechat_page_dc.update({
-    'login':FuWuHaoLogin
+    'login':FuWuHaoLogin,
+    'subscribe':SubscribeProb,
 })
 
 class FuWuHao_old(object):

@@ -1,3 +1,4 @@
+import {wx_jsapi_ready} from './wxtools/init_jsapi'
 var wxtool={
     is_weixin:function () {
         var ua = navigator.userAgent.toLowerCase();
@@ -16,7 +17,8 @@ var wxtool={
             }
             winclose()
         })
-    }
+    },
+    jsapi_ready:wx_jsapi_ready,
 }
 
 window.wxtool=wxtool

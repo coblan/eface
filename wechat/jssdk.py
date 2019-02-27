@@ -6,10 +6,11 @@ import time
 from helpers.func.random_str import get_str
 import hashlib
 from helpers.director.shortcut import director_view
+from . wepa.funs import get_access_token
 
 @director_view('wx_jssdk_config_parameter')
 def get_config_parameter(url):
-    access_token = _get_access_token()
+    access_token = get_access_token()
     ticket = _get_ticket(access_token)
     params = {
         'noncestr':get_str(),
@@ -28,16 +29,16 @@ def get_config_parameter(url):
     }
     
 
-@cache_redis(ex=7000)
-def _get_access_token():
-    dc ={
-        'APPID':settings.WX_APPID,
-        'APPSECRET':settings.WX_APPSECRET
-    }
-    url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%(APPID)s&secret=%(APPSECRET)s'%dc
-    rt = requests.get(url)
-    dc = json.loads(rt.text)
-    return dc['access_token']
+#@cache_redis(ex=7000)
+#def _get_access_token():
+    #dc ={
+        #'APPID':settings.WX_APPID,
+        #'APPSECRET':settings.WX_APPSECRET
+    #}
+    #url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%(APPID)s&secret=%(APPSECRET)s'%dc
+    #rt = requests.get(url)
+    #dc = json.loads(rt.text)
+    #return dc['access_token']
 
 @cache_redis(ex=7000)
 def _get_ticket(access_token):
