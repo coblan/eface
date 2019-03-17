@@ -28,18 +28,6 @@ def get_config_parameter(url):
         'timestamp':params['timestamp'],        
     }
     
-
-#@cache_redis(ex=7000)
-#def _get_access_token():
-    #dc ={
-        #'APPID':settings.WX_APPID,
-        #'APPSECRET':settings.WX_APPSECRET
-    #}
-    #url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%(APPID)s&secret=%(APPSECRET)s'%dc
-    #rt = requests.get(url)
-    #dc = json.loads(rt.text)
-    #return dc['access_token']
-
 @cache_redis(ex=7000)
 def _get_ticket(access_token):
     dc={
