@@ -1,7 +1,7 @@
 from django.conf import settings
 import requests
 import json
-from helpers.director.decorators.cache_redis import cache_redis
+from helpers.director.decorators.cache_fun import cache_fun
 import time
 from helpers.func.random_str import get_str
 import hashlib
@@ -40,7 +40,7 @@ def get_config_parameter(url):
     #dc = json.loads(rt.text)
     #return dc['access_token']
 
-@cache_redis(ex=7000)
+@cache_fun(ex=7000)
 def _get_ticket(access_token):
     dc={
         'access_token':access_token
