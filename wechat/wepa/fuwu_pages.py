@@ -14,7 +14,7 @@ from ..base_data import wechat_page_dc
 from helpers.func.random_str import short_uuid
 import urllib
 from helpers.director.decorator import get_request_cache
-
+import base64
 from django.shortcuts import render
 from .funs import get_access_token
 
@@ -125,7 +125,7 @@ class FuWuHaoLogin(object):
         wxinfo,c = WxInfo.objects.get_or_create(openid=openid)
         wxinfo.head=userinfo['headimgurl']
         wxinfo.sex=userinfo['sex']
-        wxinfo.nickname=userinfo['nickname']
+        wxinfo.nickname= base64.b64encode( userinfo['nickname'].encode('utf-8'))
         wxinfo.province=userinfo['province']
         wxinfo.city=userinfo['city']
         wxinfo.country=userinfo['country']
