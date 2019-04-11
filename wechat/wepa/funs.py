@@ -12,4 +12,8 @@ def get_access_token():
     url = url % args
     rt = requests.get(url)
     dc = json.loads(rt.text)
-    return dc['access_token']
+    try:
+        access_token = dc['access_token']
+    except:
+        raise UserWarning('不能获取access_token %s'%rt.text)
+    return access_token
