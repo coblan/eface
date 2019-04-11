@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 import random
 from django.contrib.auth.models import User
+from helpers.director.model_func.cus_fields.cus_picture import PictureField
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -62,12 +63,13 @@ class TWXOrder(models.Model):
     #token=models.CharField('token',max_length=100,blank=True)
     #update_time=models.CharField('update time',max_length=50,blank=True)
 
+
 class WxInfo(models.Model):
-    user=models.OneToOneField(User,verbose_name='user',blank=True,null=True)
+    user=models.OneToOneField(User,verbose_name='用户账号',blank=True,null=True)
     openid=models.CharField('openid',max_length=30,unique=True)
-    head=models.CharField('head',max_length=300,blank=True)
-    nickname=models.CharField('nick name',max_length=200,blank=True)
-    sex=models.CharField('sex',max_length=10,blank=True)
+    head=PictureField('微信头像',max_length=300,blank=True)
+    nickname=models.CharField('微信昵称',max_length=200,blank=True)
+    sex=models.CharField('sex',max_length=10,blank=True,)
     province=models.CharField('province',max_length=50,blank=True)
     city=models.CharField('city',max_length=50,blank=True)
     country=models.CharField('country',max_length=50,blank=True)
