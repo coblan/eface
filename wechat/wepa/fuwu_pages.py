@@ -125,7 +125,7 @@ class FuWuHaoLogin(object):
         wxinfo,c = WxInfo.objects.get_or_create(openid=openid)
         wxinfo.head=userinfo['headimgurl']
         wxinfo.sex=userinfo['sex']
-        wxinfo.nickname= base64.b64encode( userinfo['nickname'].encode('utf-8'))
+        wxinfo.dbNickname= userinfo['nickname'] #base64.b64encode( userinfo['nickname'].encode('utf-8'))
         wxinfo.province=userinfo['province']
         wxinfo.city=userinfo['city']
         wxinfo.country=userinfo['country']

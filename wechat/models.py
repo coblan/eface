@@ -4,6 +4,8 @@ from django.utils import timezone
 import random
 from django.contrib.auth.models import User
 from helpers.director.model_func.cus_fields.cus_picture import PictureField
+from django.conf import settings
+import binascii
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -73,3 +75,19 @@ class WxInfo(models.Model):
     province=models.CharField('province',max_length=50,blank=True)
     city=models.CharField('city',max_length=50,blank=True)
     country=models.CharField('country',max_length=50,blank=True)
+    
+    @property
+    def dbNickname(self):
+        isbase64 = getattr(settings,'WX_NICKNAME_HEX',False)
+        if isbase64:
+            return binascii.a2b_hex( self.nickname ).decode('utf-8')
+        else:
+            return self.nickname
+    
+    @dbNickname.setter 
+    def dbNickname(self,nickname):
+        isHEX = getattr(settings,'WX_NICKNAME_HEX',False)
+        if isHEX:
+            self.nickname = binascii.b2a_hex( nickname.encode('utf-8') )
+        else:
+            self.nickname = nickname

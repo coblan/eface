@@ -1,9 +1,12 @@
-from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director
+from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,SelectSearch
 from django.contrib.auth.models import User
 from eface.wechat.models import WxInfo
-import base64
 from helpers.case.jb_admin.admin import UserFields
- 
+from helpers.director.shortcut import field_map,model_to_name
+from helpers.director.model_func.field_procs.charproc import CharProc
+from django.conf import settings
+import binascii
+
 class wxuser(TablePage):
     def get_label(self):
         return '微信用户'
@@ -30,9 +33,23 @@ class wxuser(TablePage):
         def dict_row(self, inst):
             return {
                 'username':inst.user.username,
-                'nickname':base64.b64decode( inst.nickname ).decode('utf-8')
+                'nickname': inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
             }
         
+        class search(SelectSearch):
+            names = ['nickname']
+ 
+class NicknameProc(CharProc):
+    def filter_clean_search(self, q_str):
+        isbase64 = getattr(settings,'WX_NICKNAME_HEX',False)
+        if isbase64:
+            return binascii.b2a_hex( q_str.encode('utf-8') )
+        else:
+            return q_str
+   
+field_map.update({
+    '%s.nickname'%model_to_name(WxInfo):NicknameProc
+})  
       
 def wxinfo2user(pk):
     wxinfo = WxInfo.objects.get(pk=pk)

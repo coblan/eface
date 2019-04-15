@@ -52,7 +52,7 @@ class FuWuHao(object):
             dc = self.get_info(token,openid)
             wxinfo.head=dc['headimgurl']
             wxinfo.sex=dc['sex']
-            wxinfo.nickname=base64.b64encode( dc['nickname'].encode('utf-8') )
+            wxinfo.dbNickname=  dc['nickname'] #base64.b64encode( dc['nickname'].encode('utf-8') )
             wxinfo.province=dc['province']
             wxinfo.city=dc['city']
             wxinfo.country=dc['country']
