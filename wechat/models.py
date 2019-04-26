@@ -51,6 +51,7 @@ class TWXOrder(models.Model):
     last_update_time=models.DateTimeField(verbose_name='记录最后修改时间',auto_now=True,null=True)
     pay=models.CharField('支付情况',max_length=100,blank=True)
     confirmed=models.BooleanField('是否确认',default=False)
+    err_code_des = models.CharField('错误描述',max_length=200,blank=True)
     
     
     #def __init__(self,*args,**kw):

@@ -11,7 +11,9 @@ from ..models import TWXOrder
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse
 import os
-
+from helpers.director.decorator import need_login
+from eface.wechat.decorators.wepa_login import need_wx_login
+import urllib
 # proxy = {'https': '127.0.0.1:8087'} 
 
 
@@ -43,12 +45,17 @@ class WePayJsapi(object):
     
     replay_url= '/wx/wepay_jsapi_reply' #reverse('wepay_relay')
     trade_type='JSAPI'
+    
+    
     def __init__(self,request,engin):
         self.request=request
         self.ip=request.META['REMOTE_ADDR']
-        self.openid=request.GET['openid']
-    
+        
+        
+    @need_wx_login
     def get_context(self):
+        user = self.request.user
+        self.openid=user.wxinfo.openid
         dc = self.make_order(self.request)
         return JsonResponse(data=dc)
     
@@ -70,7 +77,7 @@ class WePayJsapi(object):
         
         rt_dc = {'msg': 'OK', 'order_args': {'appId': 'wx7018edf138c754f4', 'package': 'prepay_id=wx09170611946682a346b0be861090939790', 'nonceStr': 'ZZKolfzBSQmTBeo', 'timeStamp': '1547024783', 'signType': 'MD5', 'paySign': 'DC76B4049A521B532C5A6B1630546AEC'}}
         """
-        self.reply_full_url=r'%(host)s/%(path)s'%({'host':settings.SELF_DOMAIN,'path':self.replay_url})
+        self.reply_full_url= urllib.parse.urljoin(settings.SELF_DOMAIN,self.replay_url) # r'%(host)s/%(path)s'%({'host':settings.SELF_DOMAIN,'path':self.replay_url})
         
         params= self.make_param()
         resp =self.unify_order(params)
@@ -114,7 +121,8 @@ class WePayJsapi(object):
             'trade_type':wxorder.trade_type,
             'openid':wxorder.openid,
         }
-        return param    
+        return param  
+    
     def unify_order(self,params):
         if not 'sign' in params.keys():
             params['sign'] = self.params_sign(params)
@@ -188,7 +196,24 @@ class WePayReplay(object):
         """
         需要重载
         """
-        pass
+        no=notify_data.get('out_trade_no')
+
+        wxorder = TWXOrder.objects.get(pk=no)
+        if wxorder.confirmed:
+            # 已经生成了内部订单，表示微信已经返回过结果了
+            return 
+        
+        wxorder.confirmed=True
+        wxorder.transaction_id=notify_data.get('transaction_id')
+        wxorder.time_end=notify_data.get('time_end')
+        wxorder.total_fee=data.get('total_fee')
+        wxorder.openid=notify_data.get('openid')
+        wxorder.trade_type=notify_data.get('trade_type')
+        wxorder.result_code=notify_data.get('result_code')
+            
+        if notify_data.get('result_code') !='SUCCESS':  
+            wxorder.err_code_des=notify_data.get('err_code_des')
+        wxorder.save()
     
     def get_context(self):
         notify_data = xmltodict.parse( self.request.body).get('xml')
@@ -204,7 +229,7 @@ class WePayReplay(object):
                 'return_code':'FAIL',
                 'return_msg':'签名失败'
             }            
-        elif notify_data.get('return_code')=='SUCCESS':
+        elif notify_data.get('return_code')=='SUCCESS' :
             self.makesure_order(notify_data)
             ret={
                 'return_code':'SUCCESS',
