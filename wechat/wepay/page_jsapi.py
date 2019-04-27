@@ -14,8 +14,10 @@ import os
 from helpers.director.decorator import need_login
 from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
+import json
 # proxy = {'https': '127.0.0.1:8087'} 
-
+import logging
+general_log = logging.getLogger('general_log')
 
 class WePayJsapi(object):
     """
@@ -141,6 +143,7 @@ class WePayJsapi(object):
             # 调试代码
             resp={'return_code': 'SUCCESS', 'return_msg': 'OK', 'appid': 'wx7018edf138c754f4', 'mch_id': '1319446301', 'device_info': 'WEB', 'nonce_str': 'fJTGzW3scD3gmAIz', 'sign': 'ACE8FA498620F89E2BDF2FB88E30B003', 'result_code': 'SUCCESS', 'prepay_id': 'wx11155426455949fa57f530911795946978', 'trade_type': 'JSAPI'}
         if resp.get('return_code') !='SUCCESS' or resp.get('result_code') !='SUCCESS':
+            general_log.log(json.dumps(resp))
             raise UserWarning(resp.get('err_code_des'))
         return resp
     
