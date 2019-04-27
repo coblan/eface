@@ -10,7 +10,7 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     dc = {
-        'wechat':'/static/js/wechat.pack.js?t=%s&v=4'%js_stamp_dc.get('wechat_pack_js'),
+        'wechat':'/static/js/wechat.pack.js?t=%s&v=7'%js_stamp_dc.get('wechat_pack_js'),
     }
     return dc
 

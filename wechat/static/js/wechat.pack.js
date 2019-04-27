@@ -208,7 +208,7 @@ var wxtool = {
                             cfg.showError('用户取消支付！');
                         } else {
                             //cfg.showError(res.err_code + "--" + res.err_desc + "--" + res.err_msg);
-                            cfg.showError(res.err_msg);
+                            cfg.showError(res.err_desc);
                         }
                     }
                 });
