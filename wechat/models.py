@@ -67,12 +67,18 @@ class TWXOrder(models.Model):
     #update_time=models.CharField('update time',max_length=50,blank=True)
 
 
+SEX_OPTION=(
+    (0,'未知'),
+    (1,'男'),
+    (2,'女')
+)
+
 class WxInfo(models.Model):
     user=models.OneToOneField(User,verbose_name='用户账号',blank=True,null=True)
     openid=models.CharField('openid',max_length=30,unique=True)
     head=PictureField('微信头像',max_length=300,blank=True)
     nickname=models.CharField('微信昵称',max_length=200,blank=True)
-    sex=models.CharField('sex',max_length=10,blank=True,)
+    sex=models.CharField('sex',max_length=10,blank=True,choices=SEX_OPTION)
     province=models.CharField('province',max_length=50,blank=True)
     city=models.CharField('city',max_length=50,blank=True)
     country=models.CharField('country',max_length=50,blank=True)
