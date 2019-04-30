@@ -10,6 +10,9 @@ from .models import WxInfo
 import urllib
 import random
 import base64
+from django.conf import settings
+
+proxy = getattr(settings,'INTERNET_PROXY',{})
 
 class FuWuHao(object):
     """
@@ -42,7 +45,7 @@ class FuWuHao(object):
         print('code is %s'%code)
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
-        resp=requests.get(url)
+        resp=requests.get(url,proxies=proxy)
         dc = json.loads(resp.content)
         openid = dc['openid']
         token=dc['access_token']
@@ -64,7 +67,7 @@ class FuWuHao(object):
     def get_info(self,token,openid):
         url='https://api.weixin.qq.com/sns/userinfo?access_token=%(access_token)s&openid=%(openid)s&lang=zh_CN'\
             %{'access_token':token,'openid':openid}
-        resp=requests.get(url)
+        resp=requests.get(url,proxies=proxy)
         return json.loads(resp.content)
 
     def on_login(self,request,weinfo):

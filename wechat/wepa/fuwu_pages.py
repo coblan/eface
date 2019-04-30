@@ -18,6 +18,8 @@ import base64
 from django.shortcuts import render
 from .funs import get_access_token
 
+proxy = getattr(settings,'INTERNET_PROXY',{})
+
 class FuWuHaoLogin(object):
     """
     在使用时，如果判断用户没有登录，则
@@ -91,7 +93,8 @@ class FuWuHaoLogin(object):
         code=self.request.GET.get('code')
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
-        resp=requests.get(url)
+        
+        resp=requests.get(url,proxies=proxy)
         dc = json.loads(resp.text)
         return dc
      
@@ -111,9 +114,10 @@ class FuWuHaoLogin(object):
         'unionid': 'oyelCwmIiDGa3x4wxEbX3_LJ7y3o'}
 
         """
+        
         url='https://api.weixin.qq.com/sns/userinfo?access_token=%(access_token)s&openid=%(openid)s&lang=zh_CN'\
             %{'access_token':token,'openid':openid}
-        resp=requests.get(url)
+        resp=requests.get(url,proxies=proxy)
         resp.encoding ='utf-8'
         dc= json.loads(resp.text)
         if dc.get('errcode'):
@@ -162,7 +166,7 @@ def is_subscribe(openid):
     }
     url ="https://api.weixin.qq.com/cgi-bin/user/info?access_token=%(accesstoken)s&openid=%(openid)s&lang=zh_CN"
     url =url%args
-    rt = requests.get(url)
+    rt = requests.get(url,proxies=proxy)
     dc = json.loads(rt.text)
     return dc['subscribe'] ==1
     

@@ -8,6 +8,8 @@ import hashlib
 from helpers.director.shortcut import director_view
 from . wepa.funs import get_access_token
 
+proxy = getattr(settings,'INTERNET_PROXY',{})
+
 @director_view('wx_jssdk_config_parameter')
 def get_config_parameter(url):
     access_token = get_access_token()
@@ -34,7 +36,7 @@ def _get_ticket(access_token):
         'access_token':access_token
     }
     url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%(access_token)s&type=jsapi'%dc
-    rt = requests.get(url)
+    rt = requests.get(url,proxies=proxy)
     rt_dc = json.loads(rt.text)
     return rt_dc['ticket']
 

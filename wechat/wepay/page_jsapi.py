@@ -19,6 +19,8 @@ import json
 import logging
 general_log = logging.getLogger('general_log')
 
+proxy = getattr(settings,'INTERNET_PROXY',{})
+
 class WePayJsapi(object):
     """
     在公众号内支付，称为jsapi，
@@ -135,7 +137,7 @@ class WePayJsapi(object):
         postdata+='</xml>'
         
         if not os.environ.get('TEST'):
-            resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'))
+            resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'),proxies=proxy)
         
             #ToDo 判断是否是正确的XML，如果是，才继续解析
             resp =xmltodict.parse(resp.content).get('xml')

@@ -7,8 +7,7 @@ import random
 import time
 from django.conf import settings
 from .page_jsapi import WePayJsapi
-
-# proxy = {'https': '127.0.0.1:8087'} 
+proxy = getattr(settings,'INTERNET_PROXY',{})
 
 class WePayH5api(WePayJsapi):
     """

@@ -6,11 +6,15 @@ import requests
 import xmltodict
 import random
 import time
+from django.conf import settings
+
+proxy = getattr(settings,'INTERNET_PROXY',{})
 
 # proxy = {'https': '127.0.0.1:8087'} 
 """
 这个模块应该是没有用了。
 """
+
 
 class JSApiWePay(object):
     """
@@ -109,7 +113,7 @@ class JSApiWePay(object):
                 postdata+='<{key}>{value}</{key}>\n'.format(key=k,value=v)
         postdata+='</xml>'
         
-        resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'))
+        resp = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder',data=postdata.encode('utf-8'),proxies=proxy)
         
         #ToDo 判断是否是正确的XML，如果是，才继续解析
         resp =xmltodict.parse(resp.content).get('xml')
