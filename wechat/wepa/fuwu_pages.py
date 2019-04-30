@@ -17,6 +17,8 @@ from helpers.director.decorator import get_request_cache
 import base64
 from django.shortcuts import render
 from .funs import get_access_token
+import logging
+general_log = logging.getLogger('general_log')
 
 proxy = getattr(settings,'INTERNET_PROXY',{})
 
@@ -93,6 +95,8 @@ class FuWuHaoLogin(object):
         code=self.request.GET.get('code')
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
+        
+        general_log.debug(json.dumps(proxy))
         
         resp=requests.get(url,proxies=proxy)
         dc = json.loads(resp.text)
