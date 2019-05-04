@@ -1,7 +1,7 @@
 from django.conf import settings
 import requests
 import json
-from helpers.director.decorators.cache_fun import cache_fun
+from helpers.director.decorators.cache_fun import cache_fun,clear_fun_cache
 import time
 from helpers.func.random_str import get_str
 import hashlib
@@ -38,7 +38,11 @@ def _get_ticket(access_token):
     url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%(access_token)s&type=jsapi'%dc
     rt = requests.get(url,proxies=proxy)
     rt_dc = json.loads(rt.text)
-    return rt_dc['ticket']
+    if rt_dc.get('errcode')==40001:
+        clear_fun_cache('wx:cache:access_token')
+        raise UserWarning('微信缓存ACCESS TOKEN过期，请刷新重试！')
+    else:
+        return rt_dc['ticket']
 
 
 def _params_sign(params):
