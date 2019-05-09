@@ -38,8 +38,8 @@ class WXOrderBase(models.Model):
 
 
 class TWXOrder(models.Model):
-    
-    no = models.CharField('内部微信订单号',max_length=300,blank=True)
+    no = models.CharField('内部微信订单号',max_length=30,unique=True,default = date_shortuuid)
+    #no = models.CharField('内部微信订单号',max_length=300,blank=True)
     transaction_id=models.CharField('微信支付订单号',max_length=300,blank=True)
     time_end=models.CharField('支付完成时间',max_length=300,blank=True)
     total_fee=models.CharField('总金额',max_length=300,blank=True)
