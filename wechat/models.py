@@ -54,6 +54,9 @@ class TWXOrder(models.Model):
     confirmed=models.BooleanField('是否确认',default=False)
     err_code_des = models.CharField('错误描述',max_length=200,blank=True)
     
+    def __str__(self):
+        return self.transaction_id
+    
     
     #def __init__(self,*args,**kw):
         #super(WXOrderBase,self).__init__(*args,**kw)

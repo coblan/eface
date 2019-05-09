@@ -212,7 +212,7 @@ class WePayReplay(object):
         wxorder.confirmed=True
         wxorder.transaction_id=notify_data.get('transaction_id')
         wxorder.time_end=notify_data.get('time_end')
-        wxorder.total_fee=data.get('total_fee')
+        wxorder.total_fee=notify_data.get('total_fee')
         wxorder.openid=notify_data.get('openid')
         wxorder.trade_type=notify_data.get('trade_type')
         wxorder.result_code=notify_data.get('result_code')
@@ -220,6 +220,7 @@ class WePayReplay(object):
         if notify_data.get('result_code') !='SUCCESS':  
             wxorder.err_code_des=notify_data.get('err_code_des')
         wxorder.save()
+        return wxorder
     
     def get_context(self):
         notify_data = xmltodict.parse( self.request.body).get('xml')
