@@ -52,9 +52,11 @@ var wxtool={
                                 resolve({success:true})
                             }else{
                                 if(res.err_msg =='get_brand_wcpay_request:cancel'){
-                                    resolve({success:false,msg:'用户取消支付'})
+                                    cfg.showError('用户取消支付')
+                                    //resolve({success:false,msg:'用户取消支付'})
                                 }else{
-                                    resolve({success:false,msg:JSON.stringify(res)})
+                                    cfg.showError(JSON.stringify(res))
+                                    //resolve({success:false,msg:JSON.stringify(res)})
                                 }
                             }
                         });
