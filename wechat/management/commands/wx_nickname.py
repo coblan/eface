@@ -11,6 +11,9 @@ from django.db import transaction
 
 class Command(BaseCommand):
     """
+    相互转换
+    -s base64;hex;str
+    -d ...
     """
     def add_arguments(self, parser):
         parser.add_argument('-s', nargs='?', type=str)

@@ -30,9 +30,20 @@ class wxuser(TablePage):
                  heads:scope.head.heads,ops:scope.head.ops,ops_loc:"bottom",row:{pk:scope.row.user},par_row:scope.row}}) ''' }
             ]
         
+        def dict_head(self, head):
+            width_dc ={
+                'openid':150,
+                'nickname':150,
+                'head':120,
+                'username':160,
+            }
+            if width_dc.get(head['name']):
+                head['width'] = width_dc.get(head['name'])
+            return head
+        
         def dict_row(self, inst):
             return {
-                'username':inst.user.username,
+                'username': str(inst.user), #inst.user.username,
                 'nickname': inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
             }
         
