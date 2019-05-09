@@ -6,14 +6,15 @@ from django.contrib.auth.models import User
 from helpers.director.model_func.cus_fields.cus_picture import PictureField
 from django.conf import settings
 import binascii
+from helpers.director.model_func.order_key import date_shortuuid
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     return timezone.now().strftime('%Y%m%d%H%M%S')+''.join(random.choice(a) for i in range(8))
 
 class WXOrderBase(models.Model):
-
-    no = models.CharField('内部微信订单号',max_length=300,blank=True)
+    
+    no = models.CharField('内部微信订单号',max_length=30,unique=True,default = date_shortuuid)
     transaction_id=models.CharField('微信支付订单号',max_length=300,blank=True)
     time_end=models.CharField('支付完成时间',max_length=300,blank=True)
     total_fee=models.CharField('总金额',max_length=300,blank=True)
@@ -27,18 +28,18 @@ class WXOrderBase(models.Model):
     pay=models.CharField('支付情况',max_length=100,blank=True)
     confirmed=models.BooleanField('是否确认',default=False)
     
-    
-    def __init__(self,*args,**kw):
-        super(WXOrderBase,self).__init__(*args,**kw)
-        if not self.no:
-            self.no= 'WX'+get_no()
+    #def __init__(self,*args,**kw):
+        #super(WXOrderBase,self).__init__(*args,**kw)
+        #if not self.no:
+            #self.no= 'WX'+get_no()
     
     class Meta:
         abstract=True
 
 
 class TWXOrder(models.Model):
-    #no = models.CharField('内部微信订单号',max_length=300,blank=True)
+    
+    no = models.CharField('内部微信订单号',max_length=300,blank=True)
     transaction_id=models.CharField('微信支付订单号',max_length=300,blank=True)
     time_end=models.CharField('支付完成时间',max_length=300,blank=True)
     total_fee=models.CharField('总金额',max_length=300,blank=True)

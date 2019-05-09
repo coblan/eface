@@ -117,7 +117,7 @@ class WePayJsapi(object):
             'nonce_str':self.get_nonce_str(),
             'body':wxorder.body,
             'detail':wxorder.detail,
-            'out_trade_no':'wxorder_%s'% wxorder.pk,
+            'out_trade_no':wxorder.no,
             'fee_type':'CNY',
             'total_fee' : wxorder.total_fee,
             'spbill_create_ip' : self.ip,
@@ -204,7 +204,7 @@ class WePayReplay(object):
         """
         no=notify_data.get('out_trade_no')
 
-        wxorder = TWXOrder.objects.get(pk=no)
+        wxorder = TWXOrder.objects.get(no=no)
         if wxorder.confirmed:
             # 已经生成了内部订单，表示微信已经返回过结果了
             return 
