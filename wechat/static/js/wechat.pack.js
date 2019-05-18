@@ -209,10 +209,12 @@ var wxtool = {
                         if (res.err_msg == 'get_brand_wcpay_request:cancel') {
                             cfg.hide_load();
                             cfg.showError('用户取消支付');
+                            reject();
                             //resolve({success:false,msg:'用户取消支付'})
                         } else {
                             cfg.hide_load();
                             cfg.showError(JSON.stringify(res));
+                            reject();
                             //resolve({success:false,msg:JSON.stringify(res)})
                         }
                     }
