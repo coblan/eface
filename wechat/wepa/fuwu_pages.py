@@ -96,7 +96,7 @@ class FuWuHaoLogin(object):
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
         
-        general_log.debug('微信用户登录 代理: %(proxy)s ; code=%(code)s'%{'proxy':json.dumps(proxy),'code':code} )
+        general_log.debug('微信用户登录%(url)s 代理: %(proxy)s ; code=%(code)s'%{'url':url,'proxy':json.dumps(proxy),'code':code} )
         resp=requests.get(url,proxies=proxy)
         general_log.debug('返回结果: %s'%resp.text)
         dc = json.loads(resp.text)
