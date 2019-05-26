@@ -26,8 +26,11 @@ class PointProc(BaseFieldProc):
     
     def clean_field(self, dc, name):
         vale = dc.get(name)
-        x,y = vale.split(',')
-        return Point(x=float(x),y=float(y),srid=4326)
+        if vale:
+            x,y = vale.split(',')
+            return Point(x=float(x),y=float(y),srid=4326)
+        else:
+            return None
 
 field_map.update({
     models.PointField:PointProc

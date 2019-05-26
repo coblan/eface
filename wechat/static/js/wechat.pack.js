@@ -145,10 +145,14 @@ var wxtool = {
                         resolve({ success: true });
                     } else {
                         if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+                            cfg.hide_load();
                             cfg.showError('用户取消支付');
+                            reject();
                             //resolve({success:false,msg:'用户取消支付'})
                         } else {
+                            cfg.hide_load();
                             cfg.showError(JSON.stringify(res));
+                            reject();
                             //resolve({success:false,msg:JSON.stringify(res)})
                         }
                     }
@@ -208,7 +212,7 @@ exports = module.exports = __webpack_require__(4)();
 
 
 // module
-exports.push([module.i, ".com-wechat-confirm-win {\n  background-color: white;\n  width: 80vw;\n  padding: 2rem 1rem;\n  text-align: center;\n  border-radius: 0.3rem; }\n  .com-wechat-confirm-win .row {\n    margin: 0.5rem 0; }\n  .com-wechat-confirm-win .has-finish {\n    color: red; }\n  .com-wechat-confirm-win .has-problem {\n    color: grey; }\n", ""]);
+exports.push([module.i, ".com-wechat-confirm-win {\n  background-color: white;\n  width: 80vw;\n  padding: .6rem .3rem;\n  text-align: center;\n  border-radius: 0.1rem; }\n  .com-wechat-confirm-win .row {\n    margin: 0.15rem 0; }\n  .com-wechat-confirm-win .has-finish {\n    color: red; }\n  .com-wechat-confirm-win .has-problem {\n    color: grey; }\n", ""]);
 
 // exports
 
