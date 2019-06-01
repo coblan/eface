@@ -63,17 +63,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(6);
+__webpack_require__(7);
 
 Vue.component('com-wechat-confirm-win', {
     props: ['ctx'],
@@ -86,13 +87,13 @@ Vue.component('com-wechat-confirm-win', {
 });
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _init_jsapi = __webpack_require__(2);
+var _init_jsapi = __webpack_require__(3);
 
 var wxtool = {
     is_weixin: function is_weixin() {
@@ -165,7 +166,7 @@ var wxtool = {
 window.wxtool = wxtool;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -204,10 +205,10 @@ function wx_jsapi_ready(api_list) {
 }
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)();
+exports = module.exports = __webpack_require__(5)();
 // imports
 
 
@@ -218,7 +219,7 @@ exports.push([module.i, ".com-wechat-confirm-win {\n  background-color: white;\n
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -274,7 +275,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -526,16 +527,16 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -552,17 +553,17 @@ if(false) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _wxtools = __webpack_require__(1);
+var _wxtools = __webpack_require__(2);
 
 var wxtools = _interopRequireWildcard(_wxtools);
 
-var _confirm_win = __webpack_require__(0);
+var _confirm_win = __webpack_require__(1);
 
 var confirm_win = _interopRequireWildcard(_confirm_win);
 
