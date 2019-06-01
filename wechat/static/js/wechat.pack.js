@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,69 +73,7 @@
 "use strict";
 
 
-var wechat = {
-    jsapi_pay: function jsapi_pay(url, callback) {
-        cfg.show_load();
-        ex.get(url, function (resp) {
-            var args = resp.order_args;
-            cfg.hide_load();
-            function onBridgeReady() {
-                WeixinJSBridge.invoke(
-                //'getBrandWCPayRequest', {
-                //    "appId":"wx2421b1c4370ec43b",     //公众号名称，由商户传入
-                //    "timeStamp":"1395712654",         //时间戳，自1970年以来的秒数
-                //    "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串
-                //    "package":"prepay_id=u802345jgfjsdfgsdg888",
-                //    "signType":"MD5",         //微信签名方式：
-                //    "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名
-                //},
-                'getBrandWCPayRequest', {
-                    "appId": args.appId, //公众号名称，由商户传入
-                    "timeStamp": args.timeStamp + '', //时间戳，自1970年以来的秒数
-                    "nonceStr": args.nonceStr, //随机串
-                    "package": args.package,
-                    "signType": args.signType, //微信签名方式：
-                    "paySign": args.paySign //微信签名
-                }, function (res) {
-                    if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        // 使用以上方式判断前端返回,微信团队郑重提示：
-                        //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        callback();
-                    } else {
-                        if (res.err_msg == 'get_brand_wcpay_request:cancel') {
-                            cfg.showError('用户取消支付！');
-                        } else {
-                            //cfg.showError(res.err_code + "--" + res.err_desc + "--" + res.err_msg);
-                            cfg.showError(res.err_msg);
-                        }
-                    }
-                });
-            }
-            if (typeof WeixinJSBridge == "undefined") {
-                if (document.addEventListener) {
-                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                } else if (document.attachEvent) {
-                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                }
-            } else {
-                onBridgeReady();
-            }
-        });
-    }
-
-};
-
-window.wechat = wechat;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(7);
+__webpack_require__(6);
 
 Vue.component('com-wechat-confirm-win', {
     props: ['ctx'],
@@ -148,13 +86,13 @@ Vue.component('com-wechat-confirm-win', {
 });
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _init_jsapi = __webpack_require__(3);
+var _init_jsapi = __webpack_require__(2);
 
 var wxtool = {
     is_weixin: function is_weixin() {
@@ -227,7 +165,7 @@ var wxtool = {
 window.wxtool = wxtool;
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -266,10 +204,10 @@ function wx_jsapi_ready(api_list) {
 }
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(4)();
 // imports
 
 
@@ -280,7 +218,7 @@ exports.push([module.i, ".com-wechat-confirm-win {\n  background-color: white;\n
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -336,7 +274,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -588,16 +526,16 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(4);
+var content = __webpack_require__(3);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(5)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -614,21 +552,17 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _network = __webpack_require__(0);
-
-var network = _interopRequireWildcard(_network);
-
-var _wxtools = __webpack_require__(2);
+var _wxtools = __webpack_require__(1);
 
 var wxtools = _interopRequireWildcard(_wxtools);
 
-var _confirm_win = __webpack_require__(1);
+var _confirm_win = __webpack_require__(0);
 
 var confirm_win = _interopRequireWildcard(_confirm_win);
 
