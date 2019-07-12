@@ -21,13 +21,13 @@ class wxuser(TablePage):
         
         def getExtraHead(self):
             userfomr = UserFields()
+            fields_ctx =userfomr.get_pop_edit_ctx(getrow='{pk:scope.vc.par_row.user}')
             return [
                 {'name':'username','label':'账号','editor':'com-table-click',
-                 'heads':userfomr.get_heads(),
-                 'ops':userfomr.get_operations(),
-                 'action':''' cfg.pop_vue_com({editor:"com-form-one", ctx:{
-                 init_express:'ex.director_call("wxuserinfo2user",{pk:scope.vc.par_row.pk}).then((row)=>{ex.vueAssign(scope.vc.row,row)})',
-                 heads:scope.head.heads,ops:scope.head.ops,ops_loc:"bottom",row:{pk:scope.row.user},par_row:scope.row}}) ''' }
+                 'fields_ctx':fields_ctx,
+                 'action':fields_ctx.get('action')
+                 #'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;fctx.row={pk:scope.row.user};cfg.pop_vue_com("com-form-one",scope.head.fields_ctx) ''' 
+                 }
             ]
         
         def dict_head(self, head):
