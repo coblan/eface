@@ -22,6 +22,8 @@ general_log = logging.getLogger('general_log')
 
 proxy = getattr(settings,'INTERNET_PROXY',{})
 
+
+
 class FuWuHaoLogin(object):
     """
     在使用时，如果判断用户没有登录，则
@@ -33,8 +35,8 @@ class FuWuHaoLogin(object):
     https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7018edf138c754f4&redirect_uri=http://port.enjoyst.com/wx/login&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect
     """
     
-    APPID= settings.WX_APPID  #'wx7080c32bd10defb0'
-    APPSECRET=settings.WX_APPSECRET #'d4624c36b6795d1d99dcf0547af5443d'
+    APPID= getattr(settings,'WX_APPID' ,'')   #'wx7080c32bd10defb0'
+    APPSECRET=getattr(settings,'WX_APPSECRET','') #'d4624c36b6795d1d99dcf0547af5443d'
     need_login=False
     def __init__(self, request,engin):
         self.request=request
