@@ -1,8 +1,16 @@
 from .page_jsapi import WePayJsapi,WePayReplay
 from helpers.director.shortcut import director_view
+from helpers.director.decorator import need_login
+from django.http import HttpResponse
+import json
 
 class WePayAppapi(WePayJsapi):
     trade_type='APP'
+    
+    @need_login
+    def get_context(self):
+        dc = self.make_order(self.request)
+        return HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
     
     def make_param(self):
         """
