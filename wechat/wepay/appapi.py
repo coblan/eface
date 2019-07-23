@@ -48,4 +48,28 @@ class WePayAppapi(WePayJsapi):
         }
         return param  
     
+    def fetch_order_args(self, resp):
+        """
+        从微信返回参数中提取 参数给前端，jsapi用
+        """
+        if resp.get('return_code')!='SUCCESS':
+            ret={
+                'msg':resp.get('return_msg'),
+                'order_args':{}
+                 }            
+        else:
+            order_args={
+                'appid' : self.APPID,
+                'partnerid':self.MACHID,
+                'prepayid':resp.get('prepay_id'),
+                'package' : 'Sign=WXPay',
+                'nonceStr' : self.get_nonce_str(),
+                'timeStamp' : str(int(time.time())),
+            }
+            order_args['paySign']=self.params_sign(order_args)
+            ret={
+                'order_args': order_args
+            }    
+        return ret
+    
     
