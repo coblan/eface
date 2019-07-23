@@ -3,6 +3,7 @@ from helpers.director.shortcut import director_view
 from helpers.director.decorator import need_login
 from django.http import HttpResponse
 import json
+import time
 
 class WePayAppapi(WePayJsapi):
     trade_type='APP'
