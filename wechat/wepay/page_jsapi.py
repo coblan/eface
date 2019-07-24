@@ -196,8 +196,8 @@ class WePayReplay(object):
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
     
-    def __init__(self, request,engin):
-        self.request=request
+    def __init__(self, **kws):
+        self.request= get_request_cache()['request']#request
     
     def makesure_order(self,notify_data):
         """
@@ -224,6 +224,7 @@ class WePayReplay(object):
         return wxorder
     
     def get_context(self):
+        general_log.debug(self.request.body)
         notify_data = xmltodict.parse( self.request.body).get('xml')
         sign=notify_data.pop('sign')
         if os.environ.get('TEST'):
