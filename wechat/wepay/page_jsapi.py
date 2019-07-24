@@ -253,7 +253,7 @@ class WePayReplay(object):
         for k,v in ret.items():
             xml_str+='<{key}><![CDATA[{value}]]></{key}>'.format(key=k,value=v)
         xml_str+='</xml>'
-        return HttpResponse(xml_str,content_type="text/xml")
+        return HttpResponse(xml_str.encode('utf-8'),content_type="text/xml")
     
     def params_sign(self,params):
         sign_str = ''
