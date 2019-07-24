@@ -64,10 +64,10 @@ class WePayAppapi(WePayJsapi):
                 'partnerid':self.MACHID,
                 'prepayid':resp.get('prepay_id'),
                 'package' : 'Sign=WXPay',
-                'nonceStr' : self.get_nonce_str(),
-                'timeStamp' : str(int(time.time())),
+                'noncestr' : self.get_nonce_str(),
+                'timestamp' : str(int(time.time())),
             }
-            order_args['paySign']=self.params_sign(order_args)
+            order_args['sign']=self.params_sign(order_args)
             ret={
                 'order_args': order_args
             }    
