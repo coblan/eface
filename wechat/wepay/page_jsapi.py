@@ -51,7 +51,7 @@ class WePayJsapi(object):
     replay_url= '/wx/wepay_jsapi_reply' #reverse('wepay_relay')
     trade_type='JSAPI'
     
-    def __init__(self,**kws):
+    def __init__(self,*args,**kws):
         self.request= get_request_cache()['request']#request
         self.ip=self.request.META['REMOTE_ADDR']
         
