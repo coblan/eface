@@ -11,10 +11,11 @@ from ..models import TWXOrder
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse
 import os
-from helpers.director.decorator import need_login
+from helpers.director.decorator import need_login,get_request_cache
 from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
 import json
+
 # proxy = {'https': '127.0.0.1:8087'} 
 import logging
 general_log = logging.getLogger('general_log')
@@ -42,7 +43,7 @@ class WePayJsapi(object):
         def order_confirmed(self,wxorder):
     """
 
-    APPID=settings.WX_APPID
+    APPID=settings.WX_APPID  # 如果接通的公众号，这里就是公众号id
     APPSECRET=settings.WX_APPSECRET
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
@@ -50,15 +51,14 @@ class WePayJsapi(object):
     replay_url= '/wx/wepay_jsapi_reply' #reverse('wepay_relay')
     trade_type='JSAPI'
     
-    def __init__(self,request,engin):
-        self.request=request
-        self.ip=request.META['REMOTE_ADDR']
+    def __init__(self,**kws):
+        self.request= get_request_cache()['request']#request
+        self.ip=self.request.META['REMOTE_ADDR']
         
         
     @need_wx_login
     def get_context(self):
-        user = self.request.user
-        self.openid=user.wxinfo.openid
+        
         dc = self.make_order(self.request)
         return JsonResponse(data=dc)
     
@@ -69,6 +69,8 @@ class WePayJsapi(object):
         wxorder.total_fee = 100 # 单位分
   
         """
+        user = self.request.user
+        self.openid=user.wxinfo.openid
         wxorder = TWXOrder.objects.create(trade_type=self.trade_type,openid=self.openid)
         #wxorder.trade_type = 
         #wxorder.save()
@@ -194,8 +196,8 @@ class WePayReplay(object):
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
     
-    def __init__(self, request,engin):
-        self.request=request
+    def __init__(self, **kws):
+        self.request= get_request_cache()['request']#request
     
     def makesure_order(self,notify_data):
         """
@@ -222,6 +224,7 @@ class WePayReplay(object):
         return wxorder
     
     def get_context(self):
+        general_log.debug(self.request.body)
         notify_data = xmltodict.parse( self.request.body).get('xml')
         sign=notify_data.pop('sign')
         if os.environ.get('TEST'):
@@ -250,7 +253,7 @@ class WePayReplay(object):
         for k,v in ret.items():
             xml_str+='<{key}><![CDATA[{value}]]></{key}>'.format(key=k,value=v)
         xml_str+='</xml>'
-        return HttpResponse(xml_str,content_type="text/xml")
+        return HttpResponse(xml_str.encode('utf-8'),content_type="text/xml")
     
     def params_sign(self,params):
         sign_str = ''

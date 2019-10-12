@@ -1,5 +1,6 @@
 from ._sms import send_sms
 from django.conf import settings
+from django.http import HttpResponse
 import json 
 import uuid
 from helpers.func.random_str import get_random_number
@@ -23,9 +24,10 @@ def get_phonecode(mobile,**kws):
     
     params = {"code":code}
     __business_id = uuid.uuid1()
-    rt = send_sms(__business_id, mobile, '企鹅洗车', code_template_id,params)
+    #rt = send_sms(__business_id, mobile, '企鹅洗车', code_template_id,params)
+    rt = send_sms(__business_id, mobile, settings.ALI_SMS.get('app_name'), code_template_id,params)
     
-    print(rt)
+    #print(rt)
     general_log.info('阿里获取手机验证码返回:'+rt.decode('utf-8'))
     return  {
             'success':True,
@@ -48,4 +50,21 @@ def Validate_phonecode(mobile,ans,**kws):
         #}
     return dc
     #return HttpResponse(json.dumps(dc),content_type="application/json")
+
+def validate_phone(mobile,ans):
+    "直接调用，验证手机验证码是否正确"
+    code = redis_conn.get('sms:code:%s'%mobile)
+    if code and str(code.decode('utf-8'))==str(ans):
+        return True
+    else:
+        return False
+    
+@director_view('ali.validate_phonecode_v2')
+def Validate_phonecode_v2(mobile,ans,**kws):
+    "用于nicevalidator的remote验证,现在的com_field_phone_code控件使用该方式"
+    if validate_phone(mobile, ans):
+        out = {"ok": "正确"}
+    else:
+        out=  {"error": "验证错误，或者已经过期!"} 
+    return HttpResponse(json.dumps(out),content_type="application/json")
 
