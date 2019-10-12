@@ -196,7 +196,7 @@ class WePayReplay(object):
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
     
-    def __init__(self, **kws):
+    def __init__(self,*args, **kws):
         self.request= get_request_cache()['request']#request
     
     def makesure_order(self,notify_data):
