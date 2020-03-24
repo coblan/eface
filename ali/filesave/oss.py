@@ -35,7 +35,7 @@ class AliOssUpload(GeneralUpload):
 
     def getFileUrl(self, file_path):
         file_url = file_path.replace('\\', '/')
-        absolute_file_url=urljoin(settings.MEDIA_SAVER.get('media_url'), file_url)
+        absolute_file_url=urllib.parse.urljoin(settings.MEDIA_SAVER.get('media_url'), file_url)
         return  absolute_file_url   
 
 
@@ -45,7 +45,7 @@ def put_file(local_path,remote_url):
     bucket = oss2.Bucket(auth,settings.MEDIA_SAVER.get('endpoint') , settings.MEDIA_SAVER.get('bucket'))
     rt = bucket.put_object_from_file(remote_url,local_path)
     if rt.status == 200:
-        return urljoin(settings.MEDIA_SAVER.get('media_url'), remote_url)
+        return urllib.parse.urljoin(settings.MEDIA_SAVER.get('media_url'), remote_url)
     else:
         raise UserWarning('上传阿里云出错')
     
