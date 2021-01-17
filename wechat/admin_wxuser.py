@@ -1,7 +1,9 @@
 from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,SelectSearch
 from django.contrib.auth.models import User
 from eface.wechat.models import WxInfo
-from helpers.case.jb_admin.admin import UserFields
+#from helpers.case.jb_admin.admin import UserFields
+from helpers.case.jb_admin.admin_user import UserFields
+
 from helpers.director.shortcut import field_map,model_to_name
 from helpers.director.model_func.field_procs.charproc import CharProc
 from django.conf import settings
