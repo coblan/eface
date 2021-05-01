@@ -8,6 +8,7 @@ from helpers.director.shortcut import field_map,model_to_name
 from helpers.director.model_func.field_procs.charproc import CharProc
 from django.conf import settings
 import binascii
+from helpers.case.jb_admin.uidict import pop_edit_current_row
 
 class wxuser(TablePage):
     def get_label(self):
@@ -21,16 +22,37 @@ class wxuser(TablePage):
         exclude=[]
         hide_fields=['user']
         
+        
         def getExtraHead(self):
-            userfomr = UserFields()
-            fields_ctx =userfomr.get_pop_edit_ctx(getrow='{pk:scope.vc.par_row.user}')
             return [
-                {'name':'username','label':'账号','editor':'com-table-click',
-                 'fields_ctx':fields_ctx,
-                 'action':fields_ctx.get('action')
-                 #'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;fctx.row={pk:scope.row.user};cfg.pop_vue_com("com-form-one",scope.head.fields_ctx) ''' 
+                {'name':'username',
+                 'label':'账号',
+                 'editor':'com-table-span',
+                 #'click_express':pop_edit_current_row(),
+                 #'fields_ctx':UserFields().get_head_context(),
+                 #'class':'clickable'
                  }
             ]
+            
+                #if head['name'] =='preordainprice':
+                    #head['css']='.clickable{cursor:point}'
+                    #head['inn_editor'] =  head['editor']
+                    #head['editor']='com-table-rich-span'
+                    #head['class']='middle-col btn-like-col'
+                    #head['cell_class'] = 'if(parseFloat( scope.row.preordainprice ) >0){rt="warning clickable" }else{rt="clickable"}'  
+                    #head['click_express'] =  pop_edit_current_row()
+                    #head['fields_ctx'] = PreorderPriceForm().get_head_context()            
+        #def getExtraHead(self):
+            #userfomr = UserFields()
+            #fields_ctx =userfomr.get_pop_edit_ctx(getrow='{pk:scope.vc.par_row.user}')
+            #return [
+                #{'name':'username','label':'账号',
+                 #'editor':'com-table-click',
+                 #'fields_ctx':fields_ctx,
+                 #'action':fields_ctx.get('action')
+                 ##'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;fctx.row={pk:scope.row.user};cfg.pop_vue_com("com-form-one",scope.head.fields_ctx) ''' 
+                 #}
+            #]
         
         def dict_head(self, head):
             width_dc ={
@@ -45,8 +67,8 @@ class wxuser(TablePage):
         
         def dict_row(self, inst):
             return {
-                'username': str(inst.user), #inst.user.username,
-                'nickname': inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
+                'username': inst.user.username, #inst.user.username,
+                'nickname': inst.nickname #  inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
             }
         
         class search(SelectSearch):
