@@ -79,7 +79,7 @@ SEX_OPTION=(
 
 class WxInfo(models.Model):
     user=models.OneToOneField(User,verbose_name='用户账号',blank=True,null=True)
-    openid=models.CharField('openid',max_length=30,unique=True)
+    openid=models.CharField('openid',max_length=30,null=True,blank=True)
     head=PictureField('微信头像',max_length=300,blank=True)
     nickname = models.CharField('微信昵称',max_length=200,blank=True)
     phone = models.CharField('手机号码',max_length=50,blank=True)
@@ -87,6 +87,13 @@ class WxInfo(models.Model):
     province=models.CharField('省份',max_length=50,blank=True)
     city=models.CharField('城市',max_length=50,blank=True)
     country=models.CharField('国家',max_length=50,blank=True)
+    appid = models.CharField('Appid',max_length=30,blank=True)
+    unionid = models.CharField('openid',max_length=30,unique=True,null=True,blank=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['openid'])
+        ]
     
     @property
     def dbNickname(self):
