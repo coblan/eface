@@ -71,7 +71,7 @@ def upload_phone(info={}):
         "iv": "o3+82NEPr7nZXmMfceuCig==",
     }
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
-    dc = pc.decrypt(info.get('encryptedData' , info.get('iv') ) )
+    dc = pc.decrypt(info.get('encryptedData') , info.get('iv') )
     general_log.debug('解密结果:%s'%dc)
 
 def _create_user(openid,appid):
