@@ -6,6 +6,9 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.conf import settings
 from helpers.func.random_str import short_uuid
+from . de_crypt.WXBizDataCrypt import WXBizDataCrypt
+import logging
+general_log = logging.getLogger('general_log')
 
 @director_view('wxmin/login')
 def wxmin_login(code,appid):
@@ -23,9 +26,13 @@ def wxmin_login(code,appid):
     
     # {'session_key': 'nsNSutlsXJqFkPPY0sLBPw==', 'openid': 'ox2GhwBBqrux0MAEJmPWoPLMj3Os'}
     dc = rt.json()
+    general_log.debug('获取微信小程序code返回:%s'%dc)
     if not dc.get('openid'):
         raise UserWarning('获取Openid报错,errors=%s'%dc)
     user = _create_user(dc.get('openid'),appid)
+    user.wxinfo.session_key = dc.get('session_key')
+    user.wxinfo.save()
+    
     request = _login(user)
     return {
         'token':request.session._get_or_create_session_key(),
@@ -53,6 +60,18 @@ def wxmin_userinfo(info):
     info.user.first_name=info.nickname
     info.user.save()
     
+@director_view("wxmin/phone")
+def upload_phone(info={}):
+    """
+    """
+    user = get_request_cache()['request'].user
+    info = {
+        "encryptedData": "eVzUS4jH/S1a1yP7z1GCO7FGY3SLr2/ms4K1TN93cSGxkKj8Oxt3V3ls5uLRRymoF4t2ju0O3JjkB35FANnkJFc5px0SCUdAjeKSxEtDoGJidtnjkVwB7EB1KnzW8ZsnX4VseVJUmJUtZ21CAD8V2ILxJfjQ/Qx9RWaB/ABlvmV9zWL3x3RooLTOZrBYKk3t5XJgm17pceTjrsqsGvcfgg==",
+        "iv": "o3+82NEPr7nZXmMfceuCig==",
+    }
+    pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
+    dc = pc.decrypt(info.get('encryptedData' , info.get('iv') ) )
+    general_log.debug('解密结果:%s'%dc)
 
 def _create_user(openid,appid):
     #openid=userinfo.get('openid')

@@ -89,6 +89,7 @@ class WxInfo(models.Model):
     country=models.CharField('国家',max_length=50,blank=True)
     appid = models.CharField('Appid',max_length=30,blank=True)
     unionid = models.CharField('openid',max_length=30,unique=True,null=True,blank=True)
+    session_key = models.CharField('session_key',max_length=50,blank=True)
     
     class Meta:
         indexes = [
