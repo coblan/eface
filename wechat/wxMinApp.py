@@ -63,16 +63,21 @@ def wxmin_userinfo(info):
 @director_view("wxmin/phone")
 def upload_phone(info={}):
     """
-    """
-    general_log.debug('解密参数:%s'%info)
-    user = get_request_cache()['request'].user
     info = {
         "encryptedData": "eVzUS4jH/S1a1yP7z1GCO7FGY3SLr2/ms4K1TN93cSGxkKj8Oxt3V3ls5uLRRymoF4t2ju0O3JjkB35FANnkJFc5px0SCUdAjeKSxEtDoGJidtnjkVwB7EB1KnzW8ZsnX4VseVJUmJUtZ21CAD8V2ILxJfjQ/Qx9RWaB/ABlvmV9zWL3x3RooLTOZrBYKk3t5XJgm17pceTjrsqsGvcfgg==",
         "iv": "o3+82NEPr7nZXmMfceuCig==",
     }
+    """
+    general_log.debug('解密参数:%s'%info)
+    user = get_request_cache()['request'].user
+    #general_log.debug('appid =%s;session_key =%s'%(user.wxinfo.appid, user.wxinfo.session_key))
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
     dc = pc.decrypt(info.get('encryptedData') , info.get('iv') )
+    #dc = {'phoneNumber': '1834xxxx', 'purePhoneNumber': '1834xxxx', 'countryCode': '86', 'watermark': {'timestamp': 1621871633, 'appid': 'wx12748118a5b22116'}}
     general_log.debug('解密结果:%s'%dc)
+    user.wxinfo.phone=dc.get('phoneNumber')
+    user.wxinfo.save()
+    
 
 def _create_user(openid,appid):
     #openid=userinfo.get('openid')
