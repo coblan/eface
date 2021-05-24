@@ -68,11 +68,14 @@ def upload_phone(info={}):
         "iv": "o3+82NEPr7nZXmMfceuCig==",
     }
     """
-    general_log.debug('解密参数:%s'%info)
+    if isinstance(info,dict):
+        info_dc = info
+    else:
+        info_dc = json.loads(info)    
+    general_log.debug('解密参数:%s'%info_dc)
     user = get_request_cache()['request'].user
-    #general_log.debug('appid =%s;session_key =%s'%(user.wxinfo.appid, user.wxinfo.session_key))
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
-    dc = pc.decrypt(info.get('encryptedData') , info.get('iv') )
+    dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
     #dc = {'phoneNumber': '1834xxxx', 'purePhoneNumber': '1834xxxx', 'countryCode': '86', 'watermark': {'timestamp': 1621871633, 'appid': 'wx12748118a5b22116'}}
     general_log.debug('解密结果:%s'%dc)
     user.wxinfo.phone=dc.get('phoneNumber')
