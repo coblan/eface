@@ -38,6 +38,7 @@ def wxmin_login(code,appid):
         'token':request.session._get_or_create_session_key(),
         'head':user.wxinfo.head,
         'nickname':user.wxinfo.nickname,
+        'phone':user.wxinfo.phone,
         }
 
 @director_view('wxmin/userinfo')
