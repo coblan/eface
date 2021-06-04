@@ -12,7 +12,11 @@ general_log = logging.getLogger('general_log')
 
 @director_view('wxmin/login')
 def wxmin_login(code,appid):
-    """
+    """微信小程序登录
+    
+    小程序端获取到code,将code和appid一起发送给后端。
+    后端与微信服务器通信，获取用户openid。
+    
     @code:073msr0w3LngiW2yfc0w3JESdu4msr0q
     """
     url = 'https://api.weixin.qq.com/sns/jscode2session?appid=%(appid)s&secret=%(secret)s&js_code=%(code)s&grant_type=authorization_code'
