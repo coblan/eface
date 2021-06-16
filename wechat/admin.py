@@ -4,3 +4,5 @@ from . import page_wx_login
 from . import jssdk
 from . import admin_wxuser
 from . import wxMinApp
+
+from . import admin_wxorder
