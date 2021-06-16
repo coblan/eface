@@ -43,8 +43,8 @@ class WePayJsapi(object):
         def order_confirmed(self,wxorder):
     """
 
-    APPID=settings.WX_APPID  # 如果接通的公众号，这里就是公众号id
-    APPSECRET=settings.WX_APPSECRET
+    APPID= getattr( settings,'WX_APPID',None)  # 如果接通的公众号，这里就是公众号id
+    APPSECRET=getattr( settings ,'WX_APPSECRET',None)
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
     
@@ -54,7 +54,7 @@ class WePayJsapi(object):
     def __init__(self,*args,**kws):
         self.request= get_request_cache()['request']#request
         self.ip=self.request.META['REMOTE_ADDR']
-        
+        self.openid=self.request.user.wxinfo.openid   
         
     @need_wx_login
     def get_context(self):
@@ -70,10 +70,9 @@ class WePayJsapi(object):
   
         """
         user = self.request.user
-        self.openid=user.wxinfo.openid
-        wxorder = TWXOrder.objects.create(trade_type=self.trade_type,openid=self.openid)
-        #wxorder.trade_type = 
-        #wxorder.save()
+        wxorder = TWXOrder.objects.create(trade_type=self.trade_type,
+                                          openid=self.openid,
+                                          user=user)
         return wxorder
     
     def make_order(self,request):
@@ -191,8 +190,8 @@ class WePayJsapi(object):
 class WePayReplay(object):
     need_login=False
     
-    APPID=settings.WX_APPID
-    APPSECRET=settings.WX_APPSECRET
+    #APPID= getattr( settings,'WX_APPID',None)
+    #APPSECRET=getattr( settings,'WX_APPSECRET',None)
     MACHID=settings.WX_MACHID
     MACHSECERT=settings.WX_MACHSECERT
     

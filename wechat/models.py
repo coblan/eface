@@ -53,6 +53,7 @@ class TWXOrder(models.Model):
     pay=models.CharField('支付情况',max_length=100,blank=True)
     confirmed=models.BooleanField('是否确认',default=False)
     err_code_des = models.CharField('错误描述',max_length=200,blank=True)
+    user = models.ForeignKey(User,blank=True,null=True)
     
     def __str__(self):
         return self.transaction_id
