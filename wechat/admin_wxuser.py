@@ -20,19 +20,20 @@ class wxuser(TablePage):
     class tableCls(ModelTable):
         model = WxInfo
         exclude=[]
-        hide_fields=['user']
+        #pop_edit_fields=['id']
+        #hide_fields=['user']
         
         
-        def getExtraHead(self):
-            return [
-                {'name':'username',
-                 'label':'账号',
-                 'editor':'com-table-span',
-                 #'click_express':pop_edit_current_row(),
-                 #'fields_ctx':UserFields().get_head_context(),
-                 #'class':'clickable'
-                 }
-            ]
+        #def getExtraHead(self):
+            #return [
+                #{'name':'username',
+                 #'label':'账号',
+                 #'editor':'com-table-span',
+                 ##'click_express':pop_edit_current_row(),
+                 ##'fields_ctx':UserFields().get_head_context(),
+                 ##'class':'clickable'
+                 #}
+            #]
             
                 #if head['name'] =='preordainprice':
                     #head['css']='.clickable{cursor:point}'
@@ -56,6 +57,7 @@ class wxuser(TablePage):
         
         def dict_head(self, head):
             width_dc ={
+                'user':200,
                 'openid':150,
                 'nickname':150,
                 'head':120,
@@ -65,11 +67,11 @@ class wxuser(TablePage):
                 head['width'] = width_dc.get(head['name'])
             return head
         
-        def dict_row(self, inst):
-            return {
-                'username': inst.user.username, #inst.user.username,
-                'nickname': inst.nickname #  inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
-            }
+        #def dict_row(self, inst):
+            #return {
+                #'username':  str(inst.user), #.username, #inst.user.username,
+                #'nickname': inst.nickname #  inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
+            #}
         
         class search(SelectSearch):
             names = ['nickname']
@@ -81,7 +83,12 @@ class NicknameProc(CharProc):
             return binascii.b2a_hex( q_str.encode('utf-8') )
         else:
             return q_str
-   
+
+class WxinfoForm(ModelFields):
+    class Meta:
+        model = WxInfo
+        exclude =[]
+
 field_map.update({
     '%s.nickname'%model_to_name(WxInfo):NicknameProc
 })  
@@ -94,7 +101,9 @@ def wxinfo2user(pk):
 
 director.update({
     'wxuserinfo':wxuser.tableCls,
-    'wxuserinfo2user':wxinfo2user
+    'wxuserinfo.edit':WxinfoForm,
+    'wxuserinfo2user':wxinfo2user,
+    
 })
 
 page_dc.update({
