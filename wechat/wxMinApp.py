@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from helpers.func.random_str import short_uuid
 from . de_crypt.WXBizDataCrypt import WXBizDataCrypt
+#from helpers.director.decorator import need_login
+from .decorators.wepa_login import need_wx_user_login
+
 import logging
 general_log = logging.getLogger('general_log')
 
@@ -46,6 +49,7 @@ def wxmin_login(code,appid):
         }
 
 @director_view('wxmin/userinfo')
+@need_wx_user_login
 def wxmin_userinfo(info):
     ''''{"nickName":"秋风扫落叶","gender":1,"language":"zh_CN","city":"Meishan","province":"Sichuan","country":"China","avatarUrl":"https://thirdwx.qlogo.cn/mmopen/vi_32/Ns7ia1ibrF722h0wNorJcM3s80ibK0NibvYENa80jBAxqQZmc0uPibma6YANT6zNAkCHnMU6jlv5FNFHPKr4TribyKYw/132"}'
     '''
@@ -66,6 +70,7 @@ def wxmin_userinfo(info):
     info.user.save()
     
 @director_view("wxmin/phone")
+@need_wx_user_login
 def upload_phone(info={}):
     """
     info = {
