@@ -3,6 +3,7 @@ from helpers.director.decorator import get_request_cache
 from django.shortcuts import redirect
 from functools import wraps
 from django.core.exceptions import PermissionDenied
+from helpers.director.exceptions.unauth401 import UnAuth401Exception
 
 def need_wx_login(fun):
     """用在公众号页面上，如果未登录，则跳转服务号登录页面。
