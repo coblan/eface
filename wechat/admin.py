@@ -6,3 +6,5 @@ from . import admin_wxuser
 from . import wxMinApp
 
 from . import admin_wxorder
+
+from . import permit
