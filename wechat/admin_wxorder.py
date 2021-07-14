@@ -1,5 +1,6 @@
 from .models import TWXOrder
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,director,RowFilter,SelectSearch
+from helpers.case.jb_admin.uidict import op_excel
 
 class WXorderPage(TablePage):
     def get_label(self):
@@ -12,6 +13,10 @@ class WXorderPage(TablePage):
         model = TWXOrder
         exclude =[]
         
+        def get_operations(self):
+            return [
+                op_excel()
+            ]
         def dict_head(self, head):
             width = {
                 'user':150,
