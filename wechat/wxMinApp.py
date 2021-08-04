@@ -14,7 +14,7 @@ import logging
 general_log = logging.getLogger('general_log')
 
 @director_view('wxmin/login')
-def wxmin_login(code,appid):
+def wxmin_login(code):
     """微信小程序登录
     
     小程序端获取到code,将code和appid一起发送给后端。
@@ -22,11 +22,14 @@ def wxmin_login(code,appid):
     
     @code:073msr0w3LngiW2yfc0w3JESdu4msr0q
     """
+    appid = settings.WXMINI_APP.get('appid')
+    secret = settings.WXMINI_APP.get('secret')
     url = 'https://api.weixin.qq.com/sns/jscode2session?appid=%(appid)s&secret=%(secret)s&js_code=%(code)s&grant_type=authorization_code'
     
-    mini_dc = settings.WXMINI_APP.get(appid)
-    appid = mini_dc.get('appid')
-    secret = mini_dc.get('secret')
+    # 取消同时支持多个小程序，太过于复杂。
+    #mini_dc = settings.WXMINI_APP.get(appid)
+    #appid = mini_dc.get('appid')
+    #secret = mini_dc.get('secret')
     code = code
     url = url%{'appid':appid,'secret':secret,'code':code}
     rt = requests.get(url)
