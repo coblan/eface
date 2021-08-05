@@ -93,6 +93,9 @@ def upload_phone(info={}):
     general_log.debug('解密结果:%s'%dc)
     user.wxinfo.phone=dc.get('phoneNumber')
     user.wxinfo.save()
+    return {
+        'phone':user.wxinfo.phone
+    }
     
 
 def _create_user(openid,appid):
