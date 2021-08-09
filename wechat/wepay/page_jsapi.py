@@ -145,7 +145,7 @@ class WePayJsapi(object):
             # 调试代码
             resp={'return_code': 'SUCCESS', 'return_msg': 'OK', 'appid': 'wx7018edf138c754f4', 'mch_id': '1319446301', 'device_info': 'WEB', 'nonce_str': 'fJTGzW3scD3gmAIz', 'sign': 'ACE8FA498620F89E2BDF2FB88E30B003', 'result_code': 'SUCCESS', 'prepay_id': 'wx11155426455949fa57f530911795946978', 'trade_type': 'JSAPI'}
         if resp.get('return_code') !='SUCCESS' or resp.get('result_code') !='SUCCESS':
-            general_log.warn(json.dumps(resp))
+            general_log.warn(f'微信返回:{json.dumps(resp,ensure_ascii=False)}' )
             raise UserWarning(resp.get('err_code_des') or resp.get('return_msg'))
         return resp
     
