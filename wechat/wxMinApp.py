@@ -84,7 +84,9 @@ def upload_phone(info={}):
     if isinstance(info,dict):
         info_dc = info
     else:
-        info_dc = json.loads(info)    
+        info_dc = json.loads(info) 
+    if not info_dc.get('encryptedData'):
+        raise UserWarning('获取用户手机号码失败!')
     general_log.debug('解密参数:%s'%info_dc)
     user = get_request_cache()['request'].user
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
