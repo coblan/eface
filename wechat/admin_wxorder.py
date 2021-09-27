@@ -33,11 +33,12 @@ class WXorderPage(TablePage):
             range_fields =['create_time']
         
         class search(SelectSearch):
-            names = ['user__first_name']
+            names = ['user__wxinfo__phone','user__first_name']
             
             def get_option(self, name):
                 dc = {
-                    'user__first_name':'用户'
+                    'user__first_name':'用户昵称',
+                    'user__wxinfo__phone':'用户手机'
                 }
                 return {'value':name,'label':dc[name]}
 
