@@ -15,7 +15,7 @@ from helpers.director.decorator import need_login,get_request_cache
 from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
 import json
-
+from django.db import transaction
 # proxy = {'https': '127.0.0.1:8087'} 
 import logging
 general_log = logging.getLogger('general_log')
@@ -238,7 +238,8 @@ class WePayReplay(object):
                 'return_msg':'签名失败'
             }            
         elif notify_data.get('return_code')=='SUCCESS' :
-            self.makesure_order(notify_data)
+            with transaction.atomic():
+                self.makesure_order(notify_data)
             ret={
                 'return_code':'SUCCESS',
                 'return_msg':'OK'
