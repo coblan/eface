@@ -223,7 +223,7 @@ class WePayReplay(object):
         return wxorder
     
     def get_context(self):
-        general_log.debug(self.request.body)
+        general_log.debug('请求微信官方内容为:%s'% self.request.body)
         notify_data = xmltodict.parse( self.request.body).get('xml')
         sign=notify_data.pop('sign')
         if os.environ.get('TEST'):
