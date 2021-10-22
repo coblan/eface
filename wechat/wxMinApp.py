@@ -87,8 +87,8 @@ def upload_phone(info={}):
         info_dc = json.loads(info) 
     if not info_dc.get('encryptedData'):
         raise UserWarning('获取用户手机号码失败!')
-    general_log.debug('解密参数:%s'%info_dc)
     user = get_request_cache()['request'].user
+    general_log.debug(f'获取用户{user}手机,解密参数:{info_dc};appid:{user.wxinfo.appid};session_key:{user.wxinfo.session_key}')
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
     dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
     #dc = {'phoneNumber': '1834xxxx', 'purePhoneNumber': '1834xxxx', 'countryCode': '86', 'watermark': {'timestamp': 1621871633, 'appid': 'wx12748118a5b22116'}}
