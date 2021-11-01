@@ -90,7 +90,13 @@ def upload_phone(info={}):
     user = get_request_cache()['request'].user
     general_log.debug(f'获取用户{user}手机,解密参数:{info_dc};appid:{user.wxinfo.appid};session_key:{user.wxinfo.session_key}')
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
-    dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
+    try:
+        dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
+    except Exception as e:
+        general_log.warning(e,exc_info=True)
+        return {
+            'operation':'need_relogin'
+        }    
     #dc = {'phoneNumber': '1834xxxx', 'purePhoneNumber': '1834xxxx', 'countryCode': '86', 'watermark': {'timestamp': 1621871633, 'appid': 'wx12748118a5b22116'}}
     general_log.debug('解密结果:%s'%dc)
     user.wxinfo.phone=dc.get('phoneNumber')
@@ -98,6 +104,7 @@ def upload_phone(info={}):
     return {
         'phone':user.wxinfo.phone
     }
+
     
 
 def _create_user(openid,appid):
