@@ -94,7 +94,7 @@ def upload_phone(info={}):
         dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
     except Exception as e:
         general_log.warning(e,exc_info=True)
-    if True:
+        # 可能是该用户的access_token过期了。
         return {
             'operation':'need_relogin'
         }    
