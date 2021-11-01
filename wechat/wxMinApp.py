@@ -94,6 +94,7 @@ def upload_phone(info={}):
         dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
     except Exception as e:
         general_log.warning(e,exc_info=True)
+    if True:
         return {
             'operation':'need_relogin'
         }    
