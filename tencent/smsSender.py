@@ -11,10 +11,11 @@ import logging
 general_log = logging.getLogger('general_log')
 
 class SmsSender(object):
-    def __init__(self,sdkappid,appkey,template_id):
+    def __init__(self,sdkappid,appkey,template_id,sign):
         self.sdkappid= sdkappid
         self.appkey = appkey
         self.template_id = template_id
+        self.sign=sign
     
     def send(self,mobile,params):
         """
@@ -44,6 +45,7 @@ class SmsSender(object):
                     "params":params,
                     "sig": siged,
                     #"sign": "测试短信",
+                    "sign":self.sign,
                     "tel": {
                         "mobile": mobile,
                         "nationcode": "86"
@@ -53,4 +55,4 @@ class SmsSender(object):
             }
         general_log.info('向手机号码:%(mobile)s,发送短信模板:%(template_id)s,参数:%(params)s' % {'mobile': mobile,'template_id':self.template_id, 'params': params,})
         rt = requests.post(api_url, json.dumps(dc) )
-        general_log.info( rt.text )
+        general_log.info( json.loads(  rt.text ) )
