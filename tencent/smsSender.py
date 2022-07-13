@@ -56,3 +56,7 @@ class SmsSender(object):
         general_log.info('向手机号码:%(mobile)s,发送短信模板:%(template_id)s,参数:%(params)s' % {'mobile': mobile,'template_id':self.template_id, 'params': params,})
         rt = requests.post(api_url, json.dumps(dc) )
         general_log.info( json.loads(  rt.text ) )
+        dc = rt.json()
+        if dc.get('result') != 0:
+            raise UserWarning(dc.get('errmsg'))
+        
