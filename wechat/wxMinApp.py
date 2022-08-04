@@ -88,7 +88,8 @@ def upload_phone(info={}):
     if not info_dc.get('encryptedData'):
         raise UserWarning('获取用户手机号码失败!')
     user = get_request_cache()['request'].user
-    general_log.debug(f'获取用户{user}手机,解密参数:{info_dc};appid:{user.wxinfo.appid};session_key:{user.wxinfo.session_key}')
+    general_log.debug('获取用户{user}手机,解密参数:{info_dc};appid:{appid};session_key:{session_key}'\
+                      .format({"user":user,"info_dc":info_dc,"appid":user.wxinfo.appid,"session_key":user.wxinfo.session_key}))
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
     try:
         dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
