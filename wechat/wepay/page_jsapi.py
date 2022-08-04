@@ -16,6 +16,7 @@ from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
 import json
 from django.db import transaction
+from helpers.director.network import argument
 # proxy = {'https': '127.0.0.1:8087'} 
 import logging
 general_log = logging.getLogger('general_log')
@@ -54,8 +55,13 @@ class WePayJsapi(object):
     def __init__(self,*args,**kws):
         self.request= get_request_cache()['request']#request
         self.ip=self.request.META['REMOTE_ADDR']
-        self.openid=self.request.user.wxinfo.openid   
-        
+        self.kws = argument.get_argument(self.request,outtype='dict')
+        self.openid = self.getOpenid()
+    
+    
+    def getOpenid(self):
+        return self.request.user.wxinfo.openid   
+    
     @need_wx_login
     def get_context(self):
         
