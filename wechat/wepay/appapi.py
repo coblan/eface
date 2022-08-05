@@ -8,10 +8,12 @@ import time
 class WePayAppapi(WePayJsapi):
     trade_type='APP'
     
-    @need_login
     def get_context(self):
         dc = self.make_order(self.request)
         return HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+    
+    def getOpenid(self):
+        return ''
     
     def make_param(self):
         """
