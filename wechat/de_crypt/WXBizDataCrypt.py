@@ -18,7 +18,7 @@ class WXBizDataCrypt:
         cipher = AES.new(sessionKey, AES.MODE_CBC, iv)
         
         bb = self._unpad(cipher.decrypt(encryptedData))
-        general_log.debug('解密json为:{bb}'.format({"bb":bb}))
+        general_log.debug('解密json为:{bb}'.format(**{"bb":bb}))
         decrypted = json.loads(bb)
 
         if decrypted['watermark']['appid'] != self.appId:

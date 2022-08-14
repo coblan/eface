@@ -9,6 +9,8 @@ from helpers.func.random_str import short_uuid
 from . de_crypt.WXBizDataCrypt import WXBizDataCrypt
 #from helpers.director.decorator import need_login
 from .decorators.wepa_login import need_wx_user_login
+from helpers.func import ex
+from helpers.func.sim_signal import sim_signal
 
 import logging
 general_log = logging.getLogger('general_log')
@@ -88,8 +90,9 @@ def upload_phone(info={}):
     if not info_dc.get('encryptedData'):
         raise UserWarning('获取用户手机号码失败!')
     user = get_request_cache()['request'].user
+    #general_log.debug(f'获取用户{user}手机,解密参数:{info_dc};appid:{user.wxinfo.appid};session_key:{user.wxinfo.session_key}')
     general_log.debug('获取用户{user}手机,解密参数:{info_dc};appid:{appid};session_key:{session_key}'\
-                      .format({"user":user,"info_dc":info_dc,"appid":user.wxinfo.appid,"session_key":user.wxinfo.session_key}))
+                      .format(**{"user":user,"info_dc":info_dc,"appid":user.wxinfo.appid,"session_key":user.wxinfo.session_key}))
     pc = WXBizDataCrypt(user.wxinfo.appid, user.wxinfo.session_key)
     try:
         dc = pc.decrypt(info_dc.get('encryptedData') , info_dc.get('iv') )
@@ -103,6 +106,23 @@ def upload_phone(info={}):
     general_log.debug('解密结果:%s'%dc)
     user.wxinfo.phone=dc.get('phoneNumber')
     user.wxinfo.save()
+    if ex.dotDictGet(settings,'WECHAT.phone_is_account',False):
+        other = User.objects.filter(username=user.wxinfo.phone).first()
+        if other and other!= user:
+             # 通过电话号码关联到新的账号
+            other.wxinfo = user.wxinfo
+            user.wxinfo.user = other
+            user.wxinfo.save()
+            general_log.debug('删除额外账号:%s'%user.pk)
+            user.delete()
+            return {
+                'operation':'need_relogin'
+            }
+        else:
+            user.username=user.wxinfo.phone
+            user.save()
+            sim_signal.send('phone-account.create',user)
+        
     return {
         'phone':user.wxinfo.phone
     }
