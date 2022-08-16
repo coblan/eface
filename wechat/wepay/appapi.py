@@ -71,7 +71,7 @@ class WePayAppapi(WePayJsapi):
             }
             order_args['sign']=self.params_sign(order_args)
             ret={
-                'order_args': order_args
+                'data': order_args
             }    
         return ret
     
