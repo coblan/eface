@@ -7,10 +7,15 @@ import time
 
 class WePayAppapi(WePayJsapi):
     trade_type='APP'
-    
+
     def get_context(self):
+        """
+        这里是总函数，出口为dict，让dapi去处理所有事情。app时，用户可以不用登录，通过out_trade_no定位订单。
+        """
         dc = self.make_order(self.request)
-        return HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+        return dc
+        #dc['success'] = True
+        #return HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
     
     def getOpenid(self):
         return ''
