@@ -20,7 +20,7 @@ class wxuser(TablePage):
     class tableCls(ModelTable):
         model = WxInfo
         exclude=[]
-        #pop_edit_fields=['id']
+        pop_edit_fields=['id']
         #hide_fields=['user']
         
         
