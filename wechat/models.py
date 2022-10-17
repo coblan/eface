@@ -97,6 +97,9 @@ class WxInfo(models.Model):
             models.Index(fields=['openid'])
         ]
     
+    def __str__(self):
+        return '%s的微信信息'%( self.nickname or self.user)
+    
     @property
     def dbNickname(self):
         isbase64 = getattr(settings,'WX_NICKNAME_HEX',False)
