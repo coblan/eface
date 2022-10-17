@@ -11,6 +11,7 @@ from . de_crypt.WXBizDataCrypt import WXBizDataCrypt
 from .decorators.wepa_login import need_wx_user_login
 from helpers.func import ex
 from helpers.func.sim_signal import sim_signal
+from helpers.func.d_import import import_element
 
 import logging
 general_log = logging.getLogger('general_log')
@@ -106,22 +107,44 @@ def upload_phone(info={}):
     general_log.debug('解密结果:%s'%dc)
     user.wxinfo.phone=dc.get('phoneNumber')
     user.wxinfo.save()
-    if ex.dotDictGet(settings,'WECHAT.phone_is_account',False):
-        other = User.objects.filter(username=user.wxinfo.phone).first()
-        if other and other!= user:
-             # 通过电话号码关联到新的账号
-            other.wxinfo = user.wxinfo
-            user.wxinfo.user = other
-            user.wxinfo.save()
-            general_log.debug('删除额外账号:%s'%user.pk)
-            user.delete()
-            return {
-                'operation':'need_relogin'
-            }
+    #if ex.dotDictGet(settings,'WECHAT.phone_is_account',False):
+        #other = User.objects.filter(username=user.wxinfo.phone).first()
+        #if other and other!= user:
+             ## 通过电话号码关联到新的账号
+            #other.wxinfo = user.wxinfo
+            #user.wxinfo.user = other
+            #user.wxinfo.save()
+            #general_log.debug('删除额外账号:%s'%user.pk)
+            #user.delete()
+            #return {
+                #'operation':'need_relogin'
+            #}
+        #else:
+            #user.username=user.wxinfo.phone
+            #user.save()
+            #sim_signal.send('phone
+    phoneAccount = ex.dotDictGet(settings,'MINI_APP.phoneAccountLogic',False)
+    if phoneAccount:
+        PhoneAccount = import_element(phoneAccount)
+        obj = PhoneAccount()
+        other = obj.getMatchUserByPhone(user.wxinfo.phone)
+        #other = User.objects.filter(username=user.wxinfo.phone).first()
+        if other :
+            if other!= user:
+                # 通过电话号码关联到新的账号
+                other.wxinfo = user.wxinfo
+                user.wxinfo.user = other
+                user.wxinfo.save()
+                general_log.debug('删除额外账号:%s'%user.pk)
+                user.delete()
+                return {
+                    'operation':'need_relogin'
+                }
         else:
             user.username=user.wxinfo.phone
             user.save()
-            sim_signal.send('phone-account.create',user)
+            #sim_signal.send('phone-account.create',user)
+            obj.newPhoneUser(user,user.wxinfo.phone)
         
     return {
         'phone':user.wxinfo.phone
@@ -155,3 +178,11 @@ def _login(user):
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     auth.login(request,user)
     return request
+
+
+class PhoneAccountLogic(object):
+    def getMatchUserByPhone(self,phone):
+        return User.objects.filter(username=phone).first()
+    
+    def newPhoneUser(self,user):
+        pass
