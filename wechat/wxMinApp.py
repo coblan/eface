@@ -136,7 +136,9 @@ def upload_phone(info={}):
                 user.wxinfo.user = other
                 user.wxinfo.save()
                 general_log.debug('删除额外账号:%s'%user.pk)
-                user.delete()
+                #user.delete()
+                user.is_valid=False
+                user.save()                
                 return {
                     'operation':'need_relogin'
                 }
