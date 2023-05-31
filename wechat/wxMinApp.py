@@ -132,13 +132,17 @@ def upload_phone(info={}):
         if other :
             if other!= user:
                 # 通过电话号码关联到新的账号
-                other.wxinfo = user.wxinfo
-                user.wxinfo.user = other
-                user.wxinfo.save()
-                general_log.debug('删除额外账号:%s'%user.pk)
+                #other.wxinfo = user.wxinfo
+                user.wxinfo .user = other
+                user.wxinfo .save()
+                
+                #general_log.debug('删除额外账号:%s'%user.pk)
                 #user.delete()
-                user.is_valid=False
-                user.save()                
+                #user.is_valid=False
+                user.save()    
+                
+                request = get_request_cache()['request']
+                auth.logout(request)                
                 return {
                     'operation':'need_relogin'
                 }
