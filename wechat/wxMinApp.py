@@ -191,4 +191,13 @@ class PhoneAccountLogic(object):
         return User.objects.filter(username=phone).first()
     
     def newPhoneUser(self,user):
+        """
+        如果上一步getMatchUserByPhone中使用phone未找到匹配账号，就会修改当前user与phone匹配。这个回调函数的作用是修正workinfo信息，
+        把workinfo信息的名字写到user上去。
+        @user：当前登录的账号，user.wxinfo.phone那些已经被修正
+        @phone：手机号码
+        这个函数的作用是，新的账号生成时(username=phone)，对接相应的workinfo信息
+        
+        具体参考文档
+        """
         pass
