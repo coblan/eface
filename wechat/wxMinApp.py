@@ -133,8 +133,11 @@ def upload_phone(info={}):
             if other!= user:
                 # 通过电话号码关联到新的账号
                 #other.wxinfo = user.wxinfo
-                user.wxinfo .user = other
-                user.wxinfo .save()
+                wxinfo = user.wxinfo
+                wxinfo.user = other
+                wxinfo.save()
+                #user.wxinfo .user = other
+                #user.wxinfo .save()
                 
                 #general_log.debug('删除额外账号:%s'%user.pk)
                 #user.delete()
