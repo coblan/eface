@@ -135,11 +135,13 @@ def upload_phone(info={}):
             if other!= user:
                 # 通过电话号码关联到新的账号
                 #other.wxinfo = user.wxinfo
-                general_log.debug(f'当前用户{user},user.wxinfo获取到的用户是{other},两者不等。')
+                general_log.debug(f'当前用户{user},user.wxinfo.phone={user.wxinfo.phone},获取到的用户是{other},两者不等。')
                 wxinfo = user.wxinfo
                 user.wxinfo=None
                 user.save()
-                
+                if hasattr(other,'wxinfo'):
+                    other.wxinfo.phone=''
+                    other.wxinfo.save()
                 other.wxinfo = wxinfo
                 other.save()
                 
