@@ -134,8 +134,15 @@ def upload_phone(info={}):
                 # 通过电话号码关联到新的账号
                 #other.wxinfo = user.wxinfo
                 wxinfo = user.wxinfo
-                wxinfo.user = other
-                wxinfo.save()
+                user.wxinfo=None
+                user.save()
+                
+                other.wxinfo = wxinfo
+                other.save()
+                
+                #wxinfo.user = other
+                #wxinfo.save()
+                
                 #user.wxinfo .user = other
                 #user.wxinfo .save()
                 
