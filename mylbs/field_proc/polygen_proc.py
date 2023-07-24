@@ -52,7 +52,10 @@ class PolygenProc(BaseFieldProc):
         """按照geoJson规范，前端传递字符串经纬度顺序:lat,lon;写入点的时候需要切换x,y """
         vale = dc.get(name)
         if vale:
-            ls = json.loads(vale)
+            if isinstance(vale,str):
+                ls = json.loads(vale)
+            else:
+                ls = vale
             return dict2poly(ls)
         else:
             return None
