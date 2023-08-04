@@ -1,4 +1,4 @@
-from helpers.director.shortcut import director_view,get_request_cache
+from helpers.director.shortcut import director_view,get_request_cache,director_element,director
 import json
 import requests
 from .models import WxInfo
@@ -13,8 +13,23 @@ from helpers.func import ex
 from helpers.func.sim_signal import sim_signal
 from helpers.func.d_import import import_element
 
+
 import logging
 general_log = logging.getLogger('general_log')
+
+
+class WxMiniApp(object):
+    def login(self,code):
+        general_log.debug('调用新的login接口')
+        return wxmin_login(code)
+
+"""
+这里做的hook,后面可以用settings来控制到底该调用哪个
+"""
+director.update({
+    'wxmini':WxMiniApp
+})
+
 
 @director_view('wxmin/login')
 def wxmin_login(code):
