@@ -31,7 +31,8 @@ class WxPay(WePayJsapi):
     
     def confirm(self):
         aa = FeibaoReply()
-        return aa.get_context()
+        dc= aa.get_context()
+        return dc
 
 director.update({
     'wepay':WxPay,
@@ -46,7 +47,8 @@ class FeibaoPay(WePayJsapi):
         
         dc = self.make_order(self.request)
         dc['orderid']=self.wxorder.pk
-        return JsonResponse(data=dc)
+        #return JsonResponse(data=dc)
+        return dc
     
     def setup_model(self):
         """
