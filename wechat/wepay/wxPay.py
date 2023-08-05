@@ -40,7 +40,7 @@ class WxPay(object):
         dc= aa.get_context()
         return dc
     
-    def payToUser(openid,amount):
+    def payToUser(self, openid,amount):
         """在微信里，通过openid给用户发放奖励。
         参考网址:https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2
         双向验证参考requests:https://www.jianshu.com/p/5be07c496744
