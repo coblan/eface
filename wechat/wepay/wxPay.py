@@ -21,6 +21,7 @@ class WxPay(WePayJsapi):
     """
     APPID=  read_dict_path(settings,'WXMINI_APP.appid') # settings.WXMINI_APP['appid']  # 如果接通的公众号，这里就是公众号id
     APPSECRET= read_dict_path(settings,'WXMINI_APP.secret') 
+    replay_url= '/dapi/element/wepay/confirm'
     
     @need_login
     def info(self):
@@ -46,10 +47,12 @@ class WxPay(WePayJsapi):
                                               user=user)
         return self. wxorder  
 
-
+    def confirm(self):
+        aa = FeibaoReply()
+        return aa.get_context()
 
 director.update({
-    'wepay':WxPay
+    'wepay':WxPay,
 })
 
 
@@ -76,7 +79,7 @@ class FeibaoReply(WePayReplay):
                                     #memo ='微信支付',
                                     #kind=6)
 
-wechat_page_dc.update({
-    'wepay_jsapi':FeibaoPay,
-    'wepay_jsapi_reply':FeibaoReply
-})
+#wechat_page_dc.update({
+    #'wepay_jsapi':FeibaoPay,
+    #'wepay_jsapi_reply':FeibaoReply
+#})
