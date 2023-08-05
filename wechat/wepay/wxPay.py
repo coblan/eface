@@ -47,6 +47,7 @@ class WxPay(WePayJsapi):
         @amount : 单位分
         微信返回xml:  <xml>\n<return_code><![CDATA[SUCCESS]]></return_code>\n<return_msg><![CDATA[]]></return_msg>\n<mch_appid><![CDATA[wx54f6cf95c7ff2c06]]></mch_appid>\n<mchid><![CDATA[1544740301]]></mchid>\n<nonce_str><![CDATA[qF2g4U9ojR9g074]]></nonce_str>\n<result_code><![CDATA[SUCCESS]]></result_code>\n<partner_trade_no><![CDATA[20210224Ce6US0Nw17j3972]]></partner_trade_no>\n<payment_no><![CDATA[10101062053222102247864627837359]]></payment_no>\n<payment_time><![CDATA[2021-02-24 22:58:44]]></payment_time>\n</xml>
         """ 
+        general_log.debug(f'开始转账openid={openid};amount={amount}')
         url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers'
         trad_no = timezone.now().strftime('%Y%m%d')
         trad_no+= get_str()
