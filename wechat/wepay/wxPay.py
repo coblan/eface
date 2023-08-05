@@ -24,11 +24,29 @@ class WxPay(WePayJsapi):
     replay_url= '/dapi/element/wepay/confirm'
     
     @need_login
-    def info(self):
+    def info(self,*args,**kws):
+        aa = FeibaoPay()
+        return aa.get_context()
+        #return JsonResponse(data=dc)
+    
+    def confirm(self):
+        aa = FeibaoReply()
+        return aa.get_context()
+
+director.update({
+    'wepay':WxPay,
+})
+
+class FeibaoPay(WePayJsapi):
+    APPID= settings.WXMINI_APP['appid']  # 如果接通的公众号，这里就是公众号id
+    APPSECRET=  settings.WXMINI_APP['secret']
+    
+    @need_login
+    def get_context(self):
+        
         dc = self.make_order(self.request)
         dc['orderid']=self.wxorder.pk
-        return dc
-        #return JsonResponse(data=dc)
+        return JsonResponse(data=dc)
     
     def setup_model(self):
         """
@@ -45,17 +63,8 @@ class WxPay(WePayJsapi):
                                             openid=self.openid,
                                             body='渣渣科技',
                                               user=user)
-        return self. wxorder  
-
-    def confirm(self):
-        aa = FeibaoReply()
-        return aa.get_context()
-
-director.update({
-    'wepay':WxPay,
-})
-
-
+        return self. wxorder 
+    
 class FeibaoReply(WePayReplay):
   
     def makesure_order(self, notify_data):
