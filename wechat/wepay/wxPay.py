@@ -8,6 +8,12 @@ from django.conf import settings
 #from .models import MoneyLog
 from helpers.director.shortcut import director
 from helpers.func.dot_dict import read_dict_path
+from django.utils import timezone
+from helpers.func.random_str import get_str
+import dicttoxml
+from eface.wechat.funs import param_sign
+import os
+import requests
 
 import logging
 general_log = logging.getLogger('general_log')
@@ -33,6 +39,39 @@ class WxPay(WePayJsapi):
         aa = FeibaoReply()
         dc= aa.get_context()
         return dc
+    
+    def payToUser(openid,amount):
+        """在微信里，通过openid给用户发放奖励。
+        参考网址:https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2
+        双向验证参考requests:https://www.jianshu.com/p/5be07c496744
+        @amount : 单位分
+        微信返回xml:  <xml>\n<return_code><![CDATA[SUCCESS]]></return_code>\n<return_msg><![CDATA[]]></return_msg>\n<mch_appid><![CDATA[wx54f6cf95c7ff2c06]]></mch_appid>\n<mchid><![CDATA[1544740301]]></mchid>\n<nonce_str><![CDATA[qF2g4U9ojR9g074]]></nonce_str>\n<result_code><![CDATA[SUCCESS]]></result_code>\n<partner_trade_no><![CDATA[20210224Ce6US0Nw17j3972]]></partner_trade_no>\n<payment_no><![CDATA[10101062053222102247864627837359]]></payment_no>\n<payment_time><![CDATA[2021-02-24 22:58:44]]></payment_time>\n</xml>
+        """ 
+        url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers'
+        trad_no = timezone.now().strftime('%Y%m%d')
+        trad_no+= get_str()
+        dc = {
+            'mch_appid': settings.WXMINI_APP['appid'],#'wx54f6cf95c7ff2c06',
+            'mchid': settings.WX_MACHID , #'1544740301',
+            'nonce_str':get_str(length=15),
+            'partner_trade_no':trad_no,
+            'openid':openid,
+            'check_name':'NO_CHECK',
+            'amount':int( amount),
+            'desc':'提现'
+        }
+        syn_key = settings.WX_MACHSECERT  
+        dc['sign']= param_sign(syn_key,dc)
+        dc_str = dicttoxml.dicttoxml(dc)
+        #pkcs_file = os.path.join(settings.BASE_DIR,'static','wechatmerchat_cert','apiclient_cert.p12')
+        cert_path = os.path.join(settings.BASE_DIR,'resource','wechatmerchat_cert','apiclient_cert.pem')
+        key_path = os.path.join(settings.BASE_DIR,'resource','wechatmerchat_cert','apiclient_key.pem')
+        #rt = post(url,data=dc_str,  verify=False, pkcs12_filename=pkcs_file,pkcs12_password=settings.WX_MERCHANT_ID)
+        rt = requests.post(url,data=dc_str,cert=(cert_path,key_path))
+        return {
+            'trade_no':trad_no,
+            'resp':rt.text
+        }    
 
 director.update({
     'wepay':WxPay,
