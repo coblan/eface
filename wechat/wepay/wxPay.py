@@ -19,7 +19,7 @@ import logging
 general_log = logging.getLogger('general_log')
 
 
-class WxPay(WePayJsapi):
+class WxPay(object):
     """
     WXPAY={
 
