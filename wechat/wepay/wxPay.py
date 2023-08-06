@@ -29,6 +29,8 @@ class WxPay(object):
     APPSECRET= read_dict_path(settings,'WXMINI_APP.secret') 
     replay_url= '/dapi/element/wepay/confirm'
     
+    public_api = ['info','confirm']
+    
     @need_login
     def info(self,*args,**kws):
         aa = FeibaoPay()
