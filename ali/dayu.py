@@ -47,6 +47,51 @@ code='567890'
     
     #print(e)
 
+class AliSMS(object):
+    appkey=settings.ALI_SMS['appkey']
+    secret=settings.ALI_SMS['appsecrect']
+    
+    def send(self,phone,sign_name,template,send_kws):
+        params=self.build_param(phone,send_kws)
+        resp=requests.post('http://gw.api.taobao.com/router/rest',params=params)
+        
+        dc=json.loads(resp.text)
+        if dc.get('error_response'):
+            raise UserWarning(resp.text)
+        # 暂时不处理 阿里大于返回的信息，只是打印出来，如果有问题，可以从log中查找到信息 
+        general_log.debug('发送阿里大于短信到,返回结果为:%s'%resp.text)
+        return code
+        
+    def random_code(self):
+        choice='1234567890'
+        return ''.join([random.choice(choice) for i in range(6)])
+    
+    def build_param(self,phone,sign_name,template,send_kws):
+        params={
+            'method':'alibaba.aliqin.fc.sms.num.send',
+            'app_key':self.appkey,
+            'timestamp':timezone.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'format':'json',
+            'v':'2.0',
+            'sign_method':'md5',
+            'sms_type':'normal',
+            'sms_free_sign_name': sign_name , # '注册验证' , #.encode('utf-8'),
+            'rec_num':phone,
+            'sms_template_code':template,
+            #'sms_param': ("{'code':'%s','product':'企鹅洗车'}"%code) #.encode('utf-8'),
+            'sms_param': json.dumps(send_kws)
+            }
+        keys = list(params.keys())
+        keys.sort()
+        param=''
+        for key in keys:
+            param += key+params[key]
+        
+        sign = hashlib.md5( (secret+param+secret).encode('utf-8') ).hexdigest().upper()
+        params['sign'] = sign
+        return params
+    
+
 class SMS(object):
     appkey=settings.ALI_SMS['appkey']
     secret=settings.ALI_SMS['appsecrect']
@@ -91,4 +136,6 @@ class SMS(object):
         sign = hashlib.md5( (secret+param+secret).encode('utf-8') ).hexdigest().upper()
         params['sign'] = sign
         return params
+    
+
 
