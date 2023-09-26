@@ -40,6 +40,7 @@ class MyJpush(jpush.JPush):
     
 def jiguang_push_message(uids,msg_title,msg_id) : # msg,msgid):
     """
+    @uids:极光的别名，前端可以自己在极光sdk里面注册。
     """
     #merchantname = inst.merchant.merchantname
     #push_cfg = settings.MERCHANT.get(merchantname).get('jpush')
@@ -52,6 +53,7 @@ def jiguang_push_message(uids,msg_title,msg_id) : # msg,msgid):
         push = _jpush.create_push()
         push.audience = jpush.audience(
                     jpush.alias(*batch_uids)
+                    
                 )
         
         #push.message =  jpush.message(msg_content='',extras= {'message_id':msgid} )
