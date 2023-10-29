@@ -21,6 +21,7 @@ class wxuser(TablePage):
         model = WxInfo
         exclude=[]
         pop_edit_fields=['id']
+        allow_create = False
         #hide_fields=['user']
         
         
