@@ -159,7 +159,8 @@ def upload_phone(info={}):
     if phoneAccount:
         PhoneAccount = import_element(phoneAccount)
         obj = PhoneAccount()
-        other = obj.getMatchUserByPhone(user.wxinfo.phone,crt_user=user)
+        #other = obj.getMatchUserByPhone(user.wxinfo.phone,crt_user=user)
+        other = obj.getMatchUserByPhone(user.wxinfo.phone)
         #other = User.objects.filter(username=user.wxinfo.phone).first()
         if other :
             if other!= user:
