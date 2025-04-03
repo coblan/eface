@@ -9,6 +9,7 @@ from helpers.director.model_func.field_procs.charproc import CharProc
 from django.conf import settings
 import binascii
 from helpers.case.jb_admin.uidict import pop_edit_current_row
+from helpers.func .dot_dict import read_dict_path
 
 class wxuser(TablePage):
     def get_label(self):
@@ -20,7 +21,9 @@ class wxuser(TablePage):
     class tableCls(ModelTable):
         model = WxInfo
         exclude=[]
-        #pop_edit_fields=['id']
+        pop_edit_fields=['id']
+        allow_create = False
+        allow_delete = read_dict_path(settings,'WXMINI_APP.wxinfo_delete',False)
         #hide_fields=['user']
         
         

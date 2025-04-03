@@ -16,6 +16,7 @@ from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
 import json
 from django.db import transaction
+from helpers.director.network import argument
 # proxy = {'https': '127.0.0.1:8087'} 
 import logging
 general_log = logging.getLogger('general_log')
@@ -45,8 +46,8 @@ class WePayJsapi(object):
 
     APPID= getattr( settings,'WX_APPID',None)  # 如果接通的公众号，这里就是公众号id
     APPSECRET=getattr( settings ,'WX_APPSECRET',None)
-    MACHID=settings.WX_MACHID
-    MACHSECERT=settings.WX_MACHSECERT
+    MACHID= getattr( settings ,'WX_MACHID',None)  
+    MACHSECERT= getattr( settings ,'WX_MACHSECERT',None) 
     
     replay_url= '/wx/wepay_jsapi_reply' #reverse('wepay_relay')
     trade_type='JSAPI'
@@ -54,8 +55,13 @@ class WePayJsapi(object):
     def __init__(self,*args,**kws):
         self.request= get_request_cache()['request']#request
         self.ip=self.request.META['REMOTE_ADDR']
-        self.openid=self.request.user.wxinfo.openid   
-        
+        self.kws = argument.get_argument(self.request,outtype='dict')
+        self.openid = self.getOpenid()
+    
+    
+    def getOpenid(self):
+        return self.request.user.wxinfo.openid   
+    
     @need_wx_login
     def get_context(self):
         
@@ -145,7 +151,7 @@ class WePayJsapi(object):
             # 调试代码
             resp={'return_code': 'SUCCESS', 'return_msg': 'OK', 'appid': 'wx7018edf138c754f4', 'mch_id': '1319446301', 'device_info': 'WEB', 'nonce_str': 'fJTGzW3scD3gmAIz', 'sign': 'ACE8FA498620F89E2BDF2FB88E30B003', 'result_code': 'SUCCESS', 'prepay_id': 'wx11155426455949fa57f530911795946978', 'trade_type': 'JSAPI'}
         if resp.get('return_code') !='SUCCESS' or resp.get('result_code') !='SUCCESS':
-            general_log.warn(f'请求微信参数:{postdata};微信返回:{json.dumps(resp,ensure_ascii=False)}' )
+            general_log.warn('请求微信参数:{%s};微信返回:%s'%(postdata,json.dumps(resp,ensure_ascii=False) ) )
             raise UserWarning(resp.get('err_code_des') or resp.get('return_msg'))
         return resp
     
@@ -192,8 +198,8 @@ class WePayReplay(object):
     
     #APPID= getattr( settings,'WX_APPID',None)
     #APPSECRET=getattr( settings,'WX_APPSECRET',None)
-    MACHID=settings.WX_MACHID
-    MACHSECERT=settings.WX_MACHSECERT
+    MACHID=  getattr( settings,'WX_MACHID',None)  
+    MACHSECERT= getattr( settings,'WX_MACHSECERT',None)  
     
     def __init__(self,*args, **kws):
         self.request= get_request_cache()['request']#request
