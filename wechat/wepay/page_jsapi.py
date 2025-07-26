@@ -46,8 +46,8 @@ class WePayJsapi(object):
 
     APPID= getattr( settings,'WX_APPID',None)  # 如果接通的公众号，这里就是公众号id
     APPSECRET=getattr( settings ,'WX_APPSECRET',None)
-    MACHID=settings.WX_MACHID
-    MACHSECERT=settings.WX_MACHSECERT
+    MACHID= getattr( settings ,'WX_MACHID',None)  
+    MACHSECERT= getattr( settings ,'WX_MACHSECERT',None) 
     
     replay_url= '/wx/wepay_jsapi_reply' #reverse('wepay_relay')
     trade_type='JSAPI'
@@ -198,8 +198,8 @@ class WePayReplay(object):
     
     #APPID= getattr( settings,'WX_APPID',None)
     #APPSECRET=getattr( settings,'WX_APPSECRET',None)
-    MACHID=settings.WX_MACHID
-    MACHSECERT=settings.WX_MACHSECERT
+    MACHID=  getattr( settings,'WX_MACHID',None)  
+    MACHSECERT= getattr( settings,'WX_MACHSECERT',None)  
     
     def __init__(self,*args, **kws):
         self.request= get_request_cache()['request']#request
