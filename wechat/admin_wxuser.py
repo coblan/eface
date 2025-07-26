@@ -74,7 +74,12 @@ class wxuser(TablePage):
             #}
         
         class search(SelectSearch):
-            names = ['nickname']
+            names = ['nickname','user__username']
+            label_map={
+                'user__username':'用户名'
+            }
+            
+            
  
 class NicknameProc(CharProc):
     def filter_clean_search(self, q_str):
