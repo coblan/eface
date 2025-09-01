@@ -1,4 +1,4 @@
-from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,SelectSearch
+from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,SelectSearch,RowFilter
 from django.contrib.auth.models import User
 from eface.wechat.models import WxInfo
 #from helpers.case.jb_admin.admin import UserFields
@@ -75,6 +75,10 @@ class wxuser(TablePage):
                 #'username':  str(inst.user), #.username, #inst.user.username,
                 #'nickname': inst.nickname #  inst.dbNickname #base64.b64decode( inst.nickname ).decode('utf-8')
             #}
+        
+        class filters(RowFilter):
+            names =['phone']
+            icontains=['phone']
         
         class search(SelectSearch):
             names = ['nickname','user__username']
