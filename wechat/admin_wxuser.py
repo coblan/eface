@@ -10,6 +10,7 @@ from django.conf import settings
 import binascii
 from helpers.case.jb_admin.uidict import pop_edit_current_row
 from helpers.func .dot_dict import read_dict_path
+from django.db.models import Q
 
 class wxuser(TablePage):
     def get_label(self):
@@ -83,8 +84,14 @@ class wxuser(TablePage):
         class search(SelectSearch):
             names = ['nickname','user__username']
             label_map={
-                'user__username':'用户名'
+                'user__username':'用户账号',
             }
+            def get_query(self,query):
+                if self.qf=='user__username' and self.q:
+                    return query.filter(Q(user__username=self.q) | Q(user__first_name=self.q))
+                else:
+                    return super().get_query(query)
+                    
             
             
  
