@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class CustomerConfig(AppConfig):
-    name = 'wechat'
+    name = 'eface.wechat'

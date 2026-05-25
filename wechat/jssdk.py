@@ -1,11 +1,11 @@
 from django.conf import settings
 import requests
 import json
-from helpers.director.decorators.cache_fun import cache_fun,clear_fun_cache
+from director.decorators.cache_fun import cache_fun,clear_fun_cache
 import time
-from helpers.func.random_str import get_str
+from director.func.random_str import get_str
 import hashlib
-from helpers.director.shortcut import director_view
+from director.shortcut import director_view
 from . wepa.funs import get_access_token
 
 proxy = getattr(settings,'INTERNET_PROXY',{})

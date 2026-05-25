@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import helpers.director.model_func.order_key
+import director.model_func.order_key
 
 
 class Migration(migrations.Migration):
@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='twxorder',
             name='no',
-            field=models.CharField(default=helpers.director.model_func.order_key.date_shortuuid, max_length=30, unique=True, verbose_name='内部微信订单号'),
+            field=models.CharField(default=director.model_func.order_key.date_shortuuid, max_length=30, unique=True, verbose_name='内部微信订单号'),
         ),
     ]

@@ -1,6 +1,6 @@
-from helpers.director.base_data import js_tr_list, js_lib_list
-from django.utils.translation import ugettext as _
-from helpers.maintenance.update_static_timestamp import js_stamp_dc
+from director.base_data import js_tr_list, js_lib_list, js_stamp_dc
+#from django.utils.translation import ugettext as _
+#from .maintenance.update_static_timestamp import js_stamp_dc
 
 def get_tr():
     return {

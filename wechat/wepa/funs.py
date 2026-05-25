@@ -1,6 +1,6 @@
 from django.conf import settings
 import requests
-from helpers.director.decorators.cache_fun import cache_fun
+from director.decorators.cache_fun import cache_fun
 import json
 
 @cache_fun(ex=7000,cache_key='wx:cache:access_token')

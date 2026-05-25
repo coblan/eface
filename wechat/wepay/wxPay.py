@@ -1,15 +1,15 @@
 from eface.wechat.wepay.page_jsapi import WePayJsapi,TWXOrder,WePayReplay
 from eface.wechat.base_data import wechat_page_dc
-from helpers.director.network import argument
-from helpers.director.decorator import need_login
+from director.func import argument
+from director.decorators.account import need_login
 from django.http import JsonResponse
 import decimal
 from django.conf import settings
 #from .models import MoneyLog
-from helpers.director.shortcut import director
-from helpers.func.dot_dict import read_dict_path
+from director.shortcut import director
+from director.func.dot_dict import read_dict_path
 from django.utils import timezone
-from helpers.func.random_str import get_str
+from director.func.random_str import get_str
 import dicttoxml
 from eface.wechat.funs import param_sign
 import os

@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import helpers.director.model_func.cus_fields.cus_picture
+import director.model_func.cus_fields.cus_picture
 
 
 class Migration(migrations.Migration):
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='wxinfo',
             name='head',
-            field=helpers.director.model_func.cus_fields.cus_picture.PictureField(blank=True, max_length=300, verbose_name='微信头像'),
+            field=director.model_func.cus_fields.cus_picture.PictureField(blank=True, max_length=300, verbose_name='微信头像'),
         ),
         migrations.AlterField(
             model_name='wxinfo',

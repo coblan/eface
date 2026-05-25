@@ -1,17 +1,17 @@
-from helpers.director.shortcut import director_view,get_request_cache,director_element,director
+from director.shortcut import director_view,get_request_cache,director_element,director
 import json
 import requests
 from .models import WxInfo
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.conf import settings
-from helpers.func.random_str import short_uuid
+from director.func.random_str import short_uuid
 from . de_crypt.WXBizDataCrypt import WXBizDataCrypt
 #from helpers.director.decorator import need_login
 from .decorators.wepa_login import need_wx_user_login
-from helpers.func import ex
-from helpers.func.sim_signal import sim_signal
-from helpers.func.d_import import import_element
+from director.func import ex
+from director.func.sim_signal import sim_signal
+from director.func.d_import import import_element
 
 
 import logging
@@ -19,6 +19,8 @@ general_log = logging.getLogger('general_log')
 
 
 class WxMiniApp(object):
+    public_api='__all__'
+    
     def login(self,code):
         """
         微信小程序前端登录后，把code传给后台。后台用code去微信服务器获取用户信息，再让用户在后台登录
@@ -46,7 +48,7 @@ director.update({
 })
 
 
-@director_view('wxmin/login')
+#@director_view('wxmin/login')
 def wxmin_login(code):
     """微信小程序登录
     

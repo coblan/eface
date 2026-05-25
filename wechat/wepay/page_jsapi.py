@@ -1,6 +1,6 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
 import hashlib
 import requests
 import xmltodict
@@ -11,13 +11,15 @@ from ..models import TWXOrder
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse
 import os
-from helpers.director.decorator import need_login,get_request_cache
+from director.decorators.account import need_login,get_request_cache
 from eface.wechat.decorators.wepa_login import need_wx_login
 import urllib
 import json
 from django.db import transaction
-from helpers.director.network import argument
-# proxy = {'https': '127.0.0.1:8087'} 
+from director.func import argument
+
+
+
 import logging
 general_log = logging.getLogger('general_log')
 

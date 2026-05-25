@@ -11,9 +11,9 @@ import urllib
 import random
 from django.conf import settings
 from ..base_data import wechat_page_dc
-from helpers.func.random_str import short_uuid
+from director.func.random_str import short_uuid
 import urllib
-from helpers.director.decorator import get_request_cache
+from director.middleware.request_cache import get_request_cache
 import base64
 from django.shortcuts import render
 from .funs import get_access_token

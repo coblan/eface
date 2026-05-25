@@ -13,3 +13,4 @@ app_code/AntTest/bin/
 deploy/*.tar.gz
 venv
 .idea/
+__pycache__

@@ -3,10 +3,10 @@ from django.db import models
 from django.utils import timezone
 import random
 from django.contrib.auth.models import User
-from helpers.director.model_func.cus_fields.cus_picture import PictureField
+from director.model_func.cus_fields.cus_picture import PictureField
 from django.conf import settings
 import binascii
-from helpers.director.model_func.order_key import date_shortuuid
+from director.model_func.order_key import date_shortuuid
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -53,7 +53,7 @@ class TWXOrder(models.Model):
     pay=models.CharField('支付情况',max_length=100,blank=True)
     confirmed=models.BooleanField('是否确认',default=False)
     err_code_des = models.CharField('错误描述',max_length=200,blank=True)
-    user = models.ForeignKey(User,blank=True,null=True)
+    user = models.ForeignKey(User,blank=True,null=True, on_delete=models.SET_NULL)
     
     def __str__(self):
         return self.transaction_id
@@ -79,7 +79,7 @@ SEX_OPTION=(
 )
 
 class WxInfo(models.Model):
-    user=models.OneToOneField(User,verbose_name='用户账号',blank=True,null=True)
+    user=models.OneToOneField(User,verbose_name='用户账号',blank=True,null=True, on_delete=models.SET_NULL)
     openid=models.CharField('openid',max_length=30,null=True,blank=True)
     head=PictureField('微信头像',max_length=300,blank=True)
     nickname = models.CharField('微信昵称',max_length=200,blank=True)
